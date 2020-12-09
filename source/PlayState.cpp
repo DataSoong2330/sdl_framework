@@ -70,11 +70,11 @@ bool PlayState::onEnter()
     this->x = (this->width - TextureManager::Instance()->getWidthOfTexture("Playing")) / 2;
     this->y = 50;
 
-    this->gameObjects.push_back(new MenuButton(25, 175, 25, 75, "Pause", 0.0d, 0, 85, 170, 255, playToPause));
+    this->gameObjects.push_back(new MenuButton(25, 175, 25, 75, "Pause", 0.0, 0, 85, 170, 255, playToPause));
 
-    this->gameObjects.push_back(new MenuButton(25, 175, 100, 150, "Return", 0.0d, 0, 85, 170, 255, returnToMenu));
+    this->gameObjects.push_back(new MenuButton(25, 175, 100, 150, "Return", 0.0, 0, 85, 170, 255, returnToMenu));
 
-    this->gameObjects.push_back(new MenuButton(25, 175, 175, 225, "Dead", 0.0d, 0, 85, 170, 255, playToGameOver));
+    this->gameObjects.push_back(new MenuButton(25, 175, 175, 225, "Dead", 0.0, 0, 85, 170, 255, playToGameOver));
 
     return true;
 }
