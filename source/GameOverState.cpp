@@ -70,7 +70,7 @@ bool GameOverState::onEnter()
 {
     InputManager::Instance()->reset();
 
-    SoundManager::Instance()->load("Beethoven_Moonlight_Sonata_Instrumental.mp3", "music", SoundType::SOUND_MUSIC);
+    SoundManager::Instance()->load("music/Beethoven_Moonlight_Sonata_Instrumental.mp3", "music", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->playMusic("music", 0);
 
     // gets the current screen size, necessary for alignment of the buttons and textures
@@ -79,9 +79,9 @@ bool GameOverState::onEnter()
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
 
-    TextureManager::Instance()->loadFont("OxygenRegular.ttf", 30, "oxyReg30");
+    TextureManager::Instance()->loadFont("ttf/OxygenRegular.ttf", 30, "oxyReg30");
 
-    TextureManager::Instance()->loadImageTexture("crystal_heads_1024_768.jpg", "gameOverBackground");
+    TextureManager::Instance()->loadImageTexture("assets/crystal_heads_1024_768.jpg", "gameOverBackground");
 
     TextureManager::Instance()->loadTextTexture("oxyReg30", "He's dead, Jim!", "white", "Over", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Neu", "white", "Neu", TextQuality::BLENDED);

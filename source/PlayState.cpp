@@ -57,9 +57,9 @@ bool PlayState::onEnter()
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
 
-    TextureManager::Instance()->loadFont("OxygenRegular.ttf", 30, "oxyReg30");
+    TextureManager::Instance()->loadFont("ttf/OxygenRegular.ttf", 30, "oxyReg30");
 
-    TextureManager::Instance()->loadImageTexture("milkyway_1024_768.jpg", "playBackground");
+    TextureManager::Instance()->loadImageTexture("assets/milkyway_1024_768.jpg", "playBackground");
 
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Playing the Game", "white", "Playing", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Pause", "white", "Pause", TextQuality::BLENDED);

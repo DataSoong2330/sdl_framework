@@ -51,9 +51,9 @@ bool PauseState::onEnter()
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
 
-    TextureManager::Instance()->loadFont("OxygenRegular.ttf", 30, "oxyReg30");
+    TextureManager::Instance()->loadFont("ttf/OxygenRegular.ttf", 30, "oxyReg30");
 
-    TextureManager::Instance()->loadImageTexture("strand_1024_768.jpg", "pauseBackground");
+    TextureManager::Instance()->loadImageTexture("assets/strand_1024_768.jpg", "pauseBackground");
 
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Pausing the Game", "white", "PauseState", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Resume", "white", "Resume", TextQuality::BLENDED);

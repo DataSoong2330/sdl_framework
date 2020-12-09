@@ -81,15 +81,15 @@ bool MenuState::onEnter()
     SDL_GetWindowSize(Game::Instance()->getWindow(), &this->width, &this->height);
 
     // loading a sound and starts playing it
-    SoundManager::Instance()->load("Bach_Air_On_the_G_String.mp3", "music", SoundType::SOUND_MUSIC);
+    SoundManager::Instance()->load("music/Bach_Air_On_the_G_String.mp3", "music", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->playMusic("music", 0);
 
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
 
-    TextureManager::Instance()->loadFont("OxygenRegular.ttf", 30, "oxyReg30");
+    TextureManager::Instance()->loadFont("ttf/OxygenRegular.ttf", 30, "oxyReg30");
 
-    TextureManager::Instance()->loadImageTexture("space_galaxy_shine_1024x768.jpg", "background");
+    TextureManager::Instance()->loadImageTexture("assets/space_galaxy_shine_1024x768.jpg", "background");
 
     TextureManager::Instance()->loadTextTexture("oxyReg30", "SDL Framework (in development)", "white", "Titel", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Play", "white", "Play", TextQuality::BLENDED);
