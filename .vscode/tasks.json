@@ -5,13 +5,13 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "g++ build active file",
+            "label": "build sdl_framework",
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
                 "${workspaceFolder}/source/*.cpp",
                 "-o",
-                "${workspaceFolder}/sdl_framework",
+                "${workspaceFolder}/sdl_framework.exe",
                 "-lSDL2",
                 "-lSDL2_gfx",
                 "-lSDL2_image",
@@ -24,11 +24,7 @@
             },
             "problemMatcher": [
                 "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            ]
         },
     ]
 }
