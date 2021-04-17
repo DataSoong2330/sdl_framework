@@ -166,6 +166,9 @@ void Game::delay()
 // renders all necessary textures
 void Game::render()
 {
+    // reset the draw color
+    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+
     // clear the renderer
     SDL_RenderClear(this->renderer);
 

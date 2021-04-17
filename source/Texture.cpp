@@ -179,3 +179,9 @@ void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* cent
     // the render function
     SDL_RenderCopyEx(Game::Instance()->getRenderer(), this->texture, clip, &renderQuad, angle, center, flip);
 }
+
+void Texture::renderPort(const SDL_Rect* portDimension)
+{
+    SDL_RenderSetViewport(Game::Instance()->getRenderer(), portDimension);
+    SDL_RenderCopy(Game::Instance()->getRenderer(), this->texture, NULL, NULL);
+}

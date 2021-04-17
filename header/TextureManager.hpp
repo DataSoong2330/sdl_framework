@@ -5,6 +5,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "../header/Texture.hpp"
+#include "../header/Viewport.hpp"
 
 class TextureManager
 {
@@ -31,6 +32,9 @@ class TextureManager
         // loads a text and saves it
         bool loadTextTexture(std::string fontID, std::string text, std::string colorID, std::string textureID, TextQuality textQuality = TextQuality::SOLID);
 
+        // adds a viewport to the map
+        void addViewport(int x, int y, int w, int h, std::string keyOfViewport, std::string keyOfTexture);
+
         // changes the color of a texture
         void setColorOfTexture(std::string textureID, std::string colorID);
         // sets the blending mode to NONE, ALPHA, ADD or MOD
@@ -52,12 +56,17 @@ class TextureManager
         // draws a ellipse to the screen
         void drawEllipse(int x, int y, int rx, int ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
+        // render all viewports to the screen
+        void renderViewports();
+
         // removes a texture from the manager
         void removeTexture(std::string id);
         // removes a color from the manager
         inline void removeColor(std::string id) { this->colors.erase(id); }
         // removes a font from the manager
         void removeFont(std::string id);
+        // removes a viewport from the manager
+        void removeViewport(std::string id);
 
         // frees the memory used by the textures and fonts
         void freeMemory() { delete textureManager; textureManager = nullptr; }
@@ -75,6 +84,8 @@ class TextureManager
         std::map<std::string, Texture*> textures;
         std::map<std::string, SDL_Color> colors;
         std::map<std::string, TTF_Font*> fonts;
+        std::map<std::string, Viewport*> viewports;
+        std::map<std::string, Viewport*>::iterator viewportIterator;
 };
 
 #endif // __TEXTUREMANAGER__

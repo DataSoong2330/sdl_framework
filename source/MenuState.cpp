@@ -61,7 +61,8 @@ void MenuState::update()
 void MenuState::render()
 {
     // draws the textures with their id and a coordinate
-    TextureManager::Instance()->drawTexture("background", 0, 0);
+    //TextureManager::Instance()->drawTexture("background", 0, 0);
+    TextureManager::Instance()->renderViewports();
     TextureManager::Instance()->drawTexture("Titel", this->x, this->y);
 
     // draws all the game objects
@@ -84,6 +85,9 @@ bool MenuState::onEnter()
     SoundManager::Instance()->load("music/Bach_Air_On_the_G_String.mp3", "music", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->playMusic("music", 0);
 
+    TextureManager::Instance()->addViewport(0, 0, this->width/2, this->height, "leftViewport", "background");
+    TextureManager::Instance()->addViewport(this->width/2, 0, this->width/2, this->height, "rightViewport", "background");
+    
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
 
@@ -105,6 +109,7 @@ bool MenuState::onEnter()
     this->gameObjects.push_back(new MenuButton(this->width / 2 - 75, this->width / 2 + 75,
                                                200, 250, "Exit", 0.0, 0, 85, 170, 255, exitFromMenu));
 
+    
 
     return true;
 }
@@ -123,6 +128,9 @@ bool MenuState::onExit()
     TextureManager::Instance()->removeTexture("Titel");
     TextureManager::Instance()->removeTexture("Play");
     TextureManager::Instance()->removeTexture("Exit");
+
+    TextureManager::Instance()->removeViewport("leftViewport");
+    TextureManager::Instance()->removeViewport("rightViewport");
 
     for(unsigned i = 0; i < this->gameObjects.size(); i++)
         delete this->gameObjects[i];

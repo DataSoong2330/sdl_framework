@@ -20,7 +20,7 @@ TextureManager::~TextureManager()
     for(auto font : this->fonts)
         TTF_CloseFont(font.second);
 
-    // clear the mp
+    // clear the map
     this->fonts.clear();
 
     // textures need to be closed too
@@ -29,6 +29,9 @@ TextureManager::~TextureManager()
 
     // clear the map
     this->textures.clear();
+
+    // clear the viewports
+    this->viewports.clear();
 
     // quit both TTF and IMG addons
     TTF_Quit();
@@ -142,6 +145,12 @@ bool TextureManager::loadTextTexture(std::string fontID, std::string text, std::
     return success;
 }
 
+// adds a viewport to the map
+void TextureManager::addViewport(int x, int y, int w, int h, std::string keyOfViewport, std::string keyOfTexture)
+{
+    this->viewports[keyOfViewport] = new Viewport(x, y, w, h, keyOfTexture);
+}
+
 // changes the color of a texture, for example a text
 void TextureManager::setColorOfTexture(std::string textureID, std::string colorID)
 {
@@ -184,11 +193,32 @@ void TextureManager::drawEllipse(int x, int y, int rx, int ry, Uint8 r, Uint8 g,
     ellipseRGBA(Game::Instance()->getRenderer(), x, y, rx, ry, r, g, b, a);
 }
 
+// renders all viewports to the screen
+void TextureManager::renderViewports()
+{
+    if(this->viewports.size() > 0)
+    {
+        Texture* texture = NULL;
+        for(this->viewportIterator = this->viewports.begin();
+            this->viewportIterator != this->viewports.end(); this->viewportIterator++)
+        {
+            texture = this->textures[this->viewportIterator->second->getKeyOfTexture()];
+            texture->renderPort(this->viewportIterator->second->getViewportRect());
+        }
+    }
+}
+
 // removes a texture from the manager
 void TextureManager::removeTexture(std::string id)
 {
     this->textures[id]->free();
     this->textures.erase(id);
+}
+
+// removes a viewport from the manager
+void TextureManager::removeViewport(std::string id)
+{
+    this->viewports.erase(id);
 }
 
 // removes a font from the manager

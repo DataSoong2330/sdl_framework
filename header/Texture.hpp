@@ -42,6 +42,7 @@ class Texture
         // angle for rotation, center is the middle of the render point
         // flip HORIZONZAL or VERTICAL
         void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+        void renderPort(const SDL_Rect* portDimension);
 
         // get the dimensions
         inline const int& getHeight() const { return this->height; }
