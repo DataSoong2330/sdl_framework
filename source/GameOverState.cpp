@@ -56,7 +56,7 @@ void GameOverState::render()
 {
     // draws the textures with their id and a coordinate
     TextureManager::Instance()->drawTexture("gameOverBackground", 0, 0);
-    TextureManager::Instance()->drawTexture("Over", this->x, this->y);
+    TextureManager::Instance()->drawTexture("Over", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -74,8 +74,9 @@ bool GameOverState::onEnter()
     SoundManager::Instance()->playMusic("music", 0);
 
     // gets the current screen size, necessary for alignment of the buttons and textures
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->width, &this->height);
-
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
+    this->mainViewport.x = this->mainViewport.y = 0;
+    
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
 
@@ -87,12 +88,9 @@ bool GameOverState::onEnter()
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Neu", "white", "Neu", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Menu", "white", "Back", TextQuality::BLENDED);
 
-    this->x = (this->width - TextureManager::Instance()->getWidthOfTexture("Over")) / 2;
-    this->y = 50;
-
-    this->gameObjects.push_back(new MenuButton(this->width - 25 - 150, this->width - 25,
+    this->gameObjects.push_back(new MenuButton(this->mainViewport.w - 25 - 150, this->mainViewport.w - 25,
                                                125, 175, "Neu", 0, 0, 85, 170, 255, restartPlay));
-    this->gameObjects.push_back(new MenuButton(this->width - 25 - 150, this->width - 25,
+    this->gameObjects.push_back(new MenuButton(this->mainViewport.w - 25 - 150, this->mainViewport.w - 25,
                                                200, 250, "Back", 0, 0, 85, 170, 255, gameOverToMain));
 
     return true;

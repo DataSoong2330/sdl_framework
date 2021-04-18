@@ -1,6 +1,7 @@
 #ifndef __GAMESTATE__
 #define __GAMESTATE__
 
+#include <SDL2/SDL.h>
 #include <string>
 #include <vector>
 
@@ -26,8 +27,9 @@ class GameState
         std::vector<GameObject*> gameObjects;
         //ButtonCoordinate coordinate;
 
-        // necessary variables for aligning the buttons
-        int x, y, width, height;
+        // sdl rectangle for saving the current screen origin and resolution
+        // necessary for aligning buttons and reset to main viewport
+        SDL_Rect mainViewport;
 
     private:
 };

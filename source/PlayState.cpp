@@ -36,7 +36,7 @@ void PlayState::render()
 {
     // draws the textures with their id and a coordinate
     TextureManager::Instance()->drawTexture("playBackground", 0, 0);
-    TextureManager::Instance()->drawTexture("Playing", this->x, this->y);
+    TextureManager::Instance()->drawTexture("Playing", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("Playing")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -52,7 +52,8 @@ bool PlayState::onEnter()
     InputManager::Instance()->reset();
 
     // gets the current screen size, necessary for alignment of the buttons and textures
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->width, &this->height);
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
+    this->mainViewport.x = this->mainViewport.y = 0;
 
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
@@ -65,10 +66,6 @@ bool PlayState::onEnter()
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Pause", "white", "Pause", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Dead", "white", "Dead", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Return", "white", "Return", TextQuality::BLENDED);
-
-    // texture alignment
-    this->x = (this->width - TextureManager::Instance()->getWidthOfTexture("Playing")) / 2;
-    this->y = 50;
 
     this->gameObjects.push_back(new MenuButton(25, 175, 25, 75, "Pause", 0.0, 0, 85, 170, 255, playToPause));
 

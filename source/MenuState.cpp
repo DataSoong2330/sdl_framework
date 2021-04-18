@@ -63,7 +63,10 @@ void MenuState::render()
     // draws the textures with their id and a coordinate
     //TextureManager::Instance()->drawTexture("background", 0, 0);
     TextureManager::Instance()->renderViewports();
-    TextureManager::Instance()->drawTexture("Titel", this->x, this->y);
+
+    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &this->mainViewport);
+
+    TextureManager::Instance()->drawTexture("Titel", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("Titel")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -79,14 +82,15 @@ bool MenuState::onEnter()
     InputManager::Instance()->reset();
 
     // gets the current screen size, necessary for alignment of the buttons and textures
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->width, &this->height);
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
+    this->mainViewport.x = this->mainViewport.y = 0;
 
     // loading a sound and starts playing it
     SoundManager::Instance()->load("music/Bach_Air_On_the_G_String.mp3", "music", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->playMusic("music", 0);
 
-    TextureManager::Instance()->addViewport(0, 0, this->width/2, this->height, "leftViewport", "background");
-    TextureManager::Instance()->addViewport(this->width/2, 0, this->width/2, this->height, "rightViewport", "background");
+    TextureManager::Instance()->addViewport(0, 0, this->mainViewport.w/2, this->mainViewport.h, "leftViewport", "background");
+    TextureManager::Instance()->addViewport(this->mainViewport.w/2, 0, this->mainViewport.w/2, this->mainViewport.h, "rightViewport", "background");
     
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
@@ -99,17 +103,11 @@ bool MenuState::onEnter()
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Play", "white", "Play", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Exit", "white", "Exit", TextQuality::BLENDED);
 
-    // texture alignment
-    this->x = (this->width - TextureManager::Instance()->getWidthOfTexture("Titel")) / 2;
-    this->y = 50;
-
-    this->gameObjects.push_back(new MenuButton(this->width / 2 - 75, this->width / 2 + 75,
+    this->gameObjects.push_back(new MenuButton(this->mainViewport.w / 2 - 75, this->mainViewport.w / 2 + 75,
                                                125, 175, "Play", 0.0, 0, 85, 170, 255, menuToPlay));
 
-    this->gameObjects.push_back(new MenuButton(this->width / 2 - 75, this->width / 2 + 75,
+    this->gameObjects.push_back(new MenuButton(this->mainViewport.w / 2 - 75, this->mainViewport.w / 2 + 75,
                                                200, 250, "Exit", 0.0, 0, 85, 170, 255, exitFromMenu));
-
-    
 
     return true;
 }
