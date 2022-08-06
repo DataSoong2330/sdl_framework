@@ -90,7 +90,7 @@ bool SoundManager::load(std::string fileName, std::string soundID, SoundType sou
             tempString += "be loaded\n";
             Logfile::Instance()->Textout(FONTCOLORS::GREEN, tempString.c_str());
 
-            this->sfxs[soundID] = chunk;
+            //this->sfxs[soundID] = chunk;
             success = true;
         }
         else
