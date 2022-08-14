@@ -2,7 +2,9 @@
 #define __GAME__
 
 #include <iostream>
+#include <fstream>
 #include <map>
+#include <nlohmann/json.hpp>
 #include <SDL2/SDL.h>
 
 #include "../header/GameStateMachine.hpp"
@@ -58,6 +60,9 @@ class Game
 
         // static game pointer for singleton
         static Game* game;
+
+        // nlohmann::json object
+        nlohmann::json config;
 
         // window resolution
         static const int width = 1024;

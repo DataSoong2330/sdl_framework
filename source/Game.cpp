@@ -49,78 +49,95 @@ bool Game::init()
     // saves the success
     bool success = false;
 
-    // init the sdl with SDL_INIT_EVERYTHING
-    if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
+    std::ifstream configFile("config.json");
+
+    if(configFile)
     {
-        Logfile::Instance()->Textout(FONTCOLORS::GREEN, "SDL successfully initialised\n");
+        this->config = nlohmann::json::parse(configFile);
 
-        // create the sdl window
-        // parameters: name, xpos, ypos, width, height, shown
-        this->window = SDL_CreateWindow("Framework Development", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
-
-        // check the window creation
-        if(this->window != 0)
+        // init the sdl with SDL_INIT_EVERYTHING
+        if(SDL_Init(SDL_INIT_EVERYTHING) == 0)
         {
-            Logfile::Instance()->Textout(FONTCOLORS::GREEN, "Window created succesfully\n");
+            Logfile::Instance()->Textout(FONTCOLORS::GREEN, "SDL successfully initialised\n");
 
-            // create the renderer
-            // parameters: the window, index of rendering driver (-1 for first available), hardware accelerated
-            this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+            nlohmann::json j_string = this->config["application"];
+            std::string jsonValue = "";
+            j_string.get_to(jsonValue);
 
-            // check the renderer creation
-            if(this->renderer != 0)
+            // create the sdl window
+            // parameters: name, xpos, ypos, width, height, shown
+            this->window = SDL_CreateWindow(jsonValue.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                            this->config["resolution"]["width"], this->config["resolution"]["height"],
+                                            SDL_WINDOW_SHOWN);
+
+            // check the window creation
+            if(this->window != 0)
             {
-                Logfile::Instance()->Textout(FONTCOLORS::GREEN, "Renderer created successfully\n");
+                Logfile::Instance()->Textout(FONTCOLORS::GREEN, "Window created succesfully\n");
 
-                // set the draw color to black (r = 0, g = 0, b = 0, a = 255)
-                SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+                // create the renderer
+                // parameters: the window, index of rendering driver (-1 for first available), hardware accelerated
+                this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
 
-                // set the flags for the texture manager init
-                int imgFlags = IMG_INIT_JPG;
-
-                // check if the TextureManager can be initiliazed
-                if(TextureManager::Instance()->initTextureManager(imgFlags))
+                // check the renderer creation
+                if(this->renderer != 0)
                 {
-                    int sfxFlags = MIX_INIT_MP3;
+                    Logfile::Instance()->Textout(FONTCOLORS::GREEN, "Renderer created successfully\n");
 
-                    if(SoundManager::Instance()->init(sfxFlags, 44100, AUDIO_S16, 2, 4096))
+                    // set the draw color to black (r = 0, g = 0, b = 0, a = 255)
+                    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+
+                    // set the flags for the texture manager init
+                    int imgFlags = IMG_INIT_JPG;
+
+                    // check if the TextureManager can be initiliazed
+                    if(TextureManager::Instance()->initTextureManager(imgFlags))
                     {
-                        this->gameStateMachine = new GameStateMachine();
-                        this->gameStateMachine->pushState(new MenuState());
+                        int sfxFlags = MIX_INIT_MP3;
 
-                        success = true;
-                        this->running = true;
+                        if(SoundManager::Instance()->init(sfxFlags, 44100, AUDIO_S16, 2, 4096))
+                        {
+                            this->gameStateMachine = new GameStateMachine();
+                            this->gameStateMachine->pushState(new MenuState());
+
+                            success = true;
+                            this->running = true;
+                        }
+                        else
+                        {
+                            Logfile::Instance()->Textout(FONTCOLORS::RED, "Failed to init Sound Manager\n");
+                            Logfile::Instance()->Textout(Mix_GetError());
+                        }
                     }
                     else
                     {
-                        Logfile::Instance()->Textout(FONTCOLORS::RED, "Failed to init Sound Manager\n");
-                        Logfile::Instance()->Textout(Mix_GetError());
+                        // some error in the TextureManager
+                        Logfile::Instance()->Textout(FONTCOLORS::RED, "Failed to init Texture Manager\n");
                     }
                 }
                 else
                 {
-                    // some error in the TextureManager
-                    Logfile::Instance()->Textout(FONTCOLORS::RED, "Failed to init Texture Manager\n");
+                    Logfile::Instance()->Textout(FONTCOLORS::RED, "Renderer could not be created\n");
+                    Logfile::Instance()->Textout(SDL_GetError());
                 }
             }
             else
             {
-                Logfile::Instance()->Textout(FONTCOLORS::RED, "Renderer could not be created\n");
+                // error handling for the window
+                Logfile::Instance()->Textout(FONTCOLORS::RED, "Window could not be created\n");
                 Logfile::Instance()->Textout(SDL_GetError());
             }
         }
         else
         {
-            // error handling for the window
-            Logfile::Instance()->Textout(FONTCOLORS::RED, "Window could not be created\n");
+            // error handling for the SDL
+            Logfile::Instance()->Textout(FONTCOLORS::RED, "SDL could not be initialized\n");
             Logfile::Instance()->Textout(SDL_GetError());
         }
     }
     else
     {
-        // error handling for the SDL
-        Logfile::Instance()->Textout(FONTCOLORS::RED, "SDL could not be initialized\n");
-        Logfile::Instance()->Textout(SDL_GetError());
+        Logfile::Instance()->Textout(FONTCOLORS::RED, "config.json could not be opened\n");
     }
 
     return success;
