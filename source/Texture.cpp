@@ -33,7 +33,6 @@ void Texture::free()
 // loads an image from the path
 bool Texture::loadFromFile(std::string path, bool colorKeying, SDL_Color colorKey)
 {
-    std::string tempString = "Texture from " + path;
     // delete old texture
     this->free();
 
@@ -56,16 +55,12 @@ bool Texture::loadFromFile(std::string path, bool colorKeying, SDL_Color colorKe
             this->height = tempSurface->h;
             this->width = tempSurface->w;
 
-            tempString += " successfully loaded\n";
-
-            Logfile::Instance()->Textout(FONTCOLORS::GREEN, tempString.c_str());
+            Logfile::Instance()->Textout("Texture", path, "loaded");
         }
         else
         {
             // if an error occured
-            tempString += " could not be loaded\n";
-            Logfile::Instance()->Textout(FONTCOLORS::RED, tempString.c_str());
-            Logfile::Instance()->Textout(FONTCOLORS::RED, SDL_GetError());
+            Logfile::Instance()->Textout("Texture", path, SDL_GetError());
         }
 
         // free the memory of the surface
@@ -74,9 +69,7 @@ bool Texture::loadFromFile(std::string path, bool colorKeying, SDL_Color colorKe
     else
     {
         // if the surface could not be created
-        tempString += " could not be loaded\n";
-        Logfile::Instance()->Textout(FONTCOLORS::RED, tempString.c_str());
-        Logfile::Instance()->Textout(FONTCOLORS::RED, SDL_GetError());
+        Logfile::Instance()->Textout("Texture", path, SDL_GetError());
     }
 
     return (this->texture != NULL);
@@ -85,8 +78,6 @@ bool Texture::loadFromFile(std::string path, bool colorKeying, SDL_Color colorKe
 // loads a texture from a text
 bool Texture::loadFromRenderedText(TTF_Font* font, std::string text, SDL_Color textColor, TextQuality textQuality)
 {
-    std::string tempString = "Texture " + text;
-
     // delete the old texture
     this->free();
 
@@ -116,16 +107,12 @@ bool Texture::loadFromRenderedText(TTF_Font* font, std::string text, SDL_Color t
             this->height = tempSurface->h;
             this->width = tempSurface->w;
 
-            tempString += " successfully loaded\n";
-
-            Logfile::Instance()->Textout(FONTCOLORS::GREEN, tempString.c_str());
+            Logfile::Instance()->Textout("TTF", text, "loaded");
         }
         else
         {
             // if an error occured
-            tempString += " could not be loaded\n";
-            Logfile::Instance()->Textout(FONTCOLORS::RED, tempString.c_str());
-            Logfile::Instance()->Textout(FONTCOLORS::RED, SDL_GetError());
+            Logfile::Instance()->Textout("TTF", text, SDL_GetError());
         }
 
         // free the memory of the surface
@@ -134,9 +121,7 @@ bool Texture::loadFromRenderedText(TTF_Font* font, std::string text, SDL_Color t
     else
     {
         // if an error occured
-        tempString += " could not be loaded\n";
-        Logfile::Instance()->Textout(FONTCOLORS::RED, tempString.c_str());
-        Logfile::Instance()->Textout(FONTCOLORS::RED, TTF_GetError());
+        Logfile::Instance()->Textout("TTF", text, TTF_GetError());
     }
 
     return (this->texture != NULL);

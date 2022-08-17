@@ -30,3 +30,7 @@
 - -lSDL2_mixer
 - -lSDL2_net
 - -lSDL2_ttf
+
+## JSON Parser for Modern C++ by Niels Lohmann
+
+-[JSON Parser for Modern C++](https://github.com/nlohmann/json)

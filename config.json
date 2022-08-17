@@ -1,15 +1,16 @@
 {
-    "application": "Framework under Development",    
+    "application": "Framework under Development",
     "resolution":{
-        "width": 1024,
-        "height": 768
+        "width": 640,
+        "height": 480
     },
-    "fullscreen": false,
+    "windowFlags":{
+    },
     "renderer":{
         "red": 0,
         "green": 0,
         "blue": 0,
-        "alpha": 0
+        "alpha": 255
     },
     "audio":{
         "frequency": 44100,

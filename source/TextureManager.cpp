@@ -45,14 +45,13 @@ bool TextureManager::initTextureManager(int imgFlags)
 
     if((IMG_Init(imgFlags) & imgFlags) && (TTF_Init() == 0))
     {
-        Logfile::Instance()->Textout(FONTCOLORS::GREEN, "Image and TTF successfully initiated!\n");
+        Logfile::Instance()->Textout("TextureManager", "Init", "Image and TTF successfully initiated!");
 
         success = true;
     }
     else
     {
-        Logfile::Instance()->Textout(FONTCOLORS::RED, "Image or TTF could not be initialized!\n");
-        Logfile::Instance()->Textout(FONTCOLORS::RED, SDL_GetError());
+        Logfile::Instance()->Textout("TextureManager", "Init", SDL_GetError());
     }
 
     return success;
@@ -79,15 +78,13 @@ bool TextureManager::loadFont(std::string file, int pointSize, std::string id)
     {
         this->fonts[id] = tmpFont;
 
-        std::string tempString = "Font " + id + " successfully added\n";
-        Logfile::Instance()->Textout(FONTCOLORS::GREEN, tempString.c_str());
+        Logfile::Instance()->Textout("TextureManager", file, "loaded");
 
         success = true;
     }
     else
     {
-        Logfile::Instance()->Textout(FONTCOLORS::RED, "Font could not be loaded!\n");
-        Logfile::Instance()->Textout(FONTCOLORS::RED, TTF_GetError());
+        Logfile::Instance()->Textout("TextureManager", file, TTF_GetError());
     }
 
     return success;

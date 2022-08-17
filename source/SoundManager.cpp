@@ -7,7 +7,6 @@ SoundManager* SoundManager::soundManager = 0;
 // lazy ctor does nothing
 SoundManager::SoundManager()
 {
-
 }
 
 // dtor calls the quit method
@@ -38,15 +37,14 @@ bool SoundManager::init(int flags, unsigned freq, Uint16 format, unsigned channe
 
     if(Mix_Init(flags))
     {
-        Logfile::Instance()->Textout(FONTCOLORS::GREEN, "Sound Manager successfully initialized\n");
+        Logfile::Instance()->Textout("SoundManager", "Init","successful");
 
         Mix_OpenAudio(freq, format, channels, chunksize);
         success = true;
     }
     else
     {
-        Logfile::Instance()->Textout(FONTCOLORS::RED, "Could not init the Sound Manager!\n");
-        Logfile::Instance()->Textout(FONTCOLORS::RED, Mix_GetError());
+        Logfile::Instance()->Textout("SoundManager", "Init", Mix_GetError());
     }
 
     return success;
@@ -55,49 +53,38 @@ bool SoundManager::init(int flags, unsigned freq, Uint16 format, unsigned channe
 // loads a sound or music file
 bool SoundManager::load(std::string fileName, std::string soundID, SoundType soundType)
 {
-    std::string tempString = "";
     bool success = false;
 
     if(soundType == SoundType::SOUND_MUSIC)
     {
-        tempString = "Music from " + fileName + " could ";
-
         Mix_Music* music = Mix_LoadMUS(fileName.c_str());
 
         if(music != NULL)
         {
-            tempString += "be loaded\n";
-            Logfile::Instance()->Textout(FONTCOLORS::GREEN, tempString.c_str());
+            Logfile::Instance()->Textout("SoundManager", fileName, "loaded");
 
             this->musics[soundID] = music;
             success = true;
         }
         else
         {
-            tempString += "not be loaded\n";
-            Logfile::Instance()->Textout(FONTCOLORS::RED, tempString.c_str());
-            Logfile::Instance()->Textout(FONTCOLORS::RED, Mix_GetError());
+            Logfile::Instance()->Textout("SoundManager", fileName, Mix_GetError());
         }
     }
     else if(soundType == SoundType::SOUND_SFX)
     {
-        tempString = "SFX from " + fileName + " could ";
-
         Mix_Chunk* chunk = Mix_LoadWAV(fileName.c_str());
 
         if(chunk != NULL)
         {
-            tempString += "be loaded\n";
-            Logfile::Instance()->Textout(FONTCOLORS::GREEN, tempString.c_str());
+            Logfile::Instance()->Textout("SoundManager", fileName, "loaded");
 
             //this->sfxs[soundID] = chunk;
             success = true;
         }
         else
         {
-            tempString += "not be loaded\n";
-            Logfile::Instance()->Textout(FONTCOLORS::RED, tempString.c_str());
-            Logfile::Instance()->Textout(FONTCOLORS::RED, Mix_GetError());
+            Logfile::Instance()->Textout("SoundManager", fileName, Mix_GetError());
         }
     }
 
