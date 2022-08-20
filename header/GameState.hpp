@@ -1,6 +1,10 @@
 #ifndef __GAMESTATE__
 #define __GAMESTATE__
 
+#include <fstream>
+#include <functional>
+#include <map>
+#include <nlohmann/json.hpp>
 #include <SDL2/SDL.h>
 #include <string>
 #include <vector>
@@ -30,6 +34,10 @@ class GameState
         // sdl rectangle for saving the current screen origin and resolution
         // necessary for aligning buttons and reset to main viewport
         SDL_Rect mainViewport;
+
+        nlohmann::json stateJson;
+
+        std::map<std::string, std::function<void()>> functionMap;
 
     private:
 };

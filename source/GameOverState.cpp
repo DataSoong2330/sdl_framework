@@ -1,10 +1,13 @@
 #include "../header/Game.hpp"
 #include "../header/GameOverState.hpp"
 #include "../header/InputManager.hpp"
+#include "../header/Logfile.hpp"
 #include "../header/MenuState.hpp"
 #include "../header/PlayState.hpp"
 #include "../header/SoundManager.hpp"
 #include "../header/TextureManager.hpp"
+
+#include <iostream>
 
 const std::string GameOverState::gameOverID = "GAMEOVER";
 
@@ -68,30 +71,94 @@ void GameOverState::render()
 
 bool GameOverState::onEnter()
 {
+    std::ifstream jsonFile("gameOverState.json");
+    nlohmann::json name, text, color, ttf;
+
+    this->functionMap["gameOverToMain"] = gameOverToMain;
+    this->functionMap["restartPlay"] = restartPlay;
+
+    if(jsonFile)
+    {
+        this->stateJson = nlohmann::json::parse(jsonFile);
+    }
+    else
+    {
+        Logfile::Instance()->Textout("GameState", "gameState.json", "failed to load");
+    }
+
     InputManager::Instance()->reset();
 
-    SoundManager::Instance()->load("music/Beethoven_Moonlight_Sonata_Instrumental.mp3", "music", SoundType::SOUND_MUSIC);
+    for(auto &item : this->stateJson["music"].items())
+    {
+        // get the path
+        name = item.value()["path"];
+        // get the id
+        text = item.key();
+
+        // load with path and key
+        SoundManager::Instance()->load(name, text, SoundType::SOUND_MUSIC);
+    }
+
     SoundManager::Instance()->playMusic("music", 0);
 
     // gets the current screen size, necessary for alignment of the buttons and textures
     SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
     this->mainViewport.x = this->mainViewport.y = 0;
-    
+
     // loading of colors, fonts and textures
-    TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
+    for(auto &item : this->stateJson["color"].items())
+    {
+        // get the id
+        name = item.key();
 
-    TextureManager::Instance()->loadFont("ttf/OxygenRegular.ttf", 30, "oxyReg30");
+        TextureManager::Instance()->loadColor(name, item.value()["red"],
+                                                    item.value()["green"],
+                                                    item.value()["blue"],
+                                                    item.value()["alpha"]);
+    }
 
-    TextureManager::Instance()->loadImageTexture("assets/crystal_heads_1024_768.jpg", "gameOverBackground");
+    for(auto &item : this->stateJson["ttf"].items())
+    {
+        // get the id
+        name = item.value()["path"];
+        // get the name
+        text = item.key();
 
-    TextureManager::Instance()->loadTextTexture("oxyReg30", "He's dead, Jim!", "white", "Over", TextQuality::BLENDED);
-    TextureManager::Instance()->loadTextTexture("oxyReg30", "Neu", "white", "Neu", TextQuality::BLENDED);
-    TextureManager::Instance()->loadTextTexture("oxyReg30", "Menu", "white", "Back", TextQuality::BLENDED);
+        // load the font with
+        TextureManager::Instance()->loadFont(name, item.value()["size"], text);
+    }
+
+    for(auto &item : this->stateJson["assets"].items())
+    {
+        // get the path
+        name = item.value()["path"];
+        // get the id
+        text = item.key();
+
+        // load the image with path and id
+        TextureManager::Instance()->loadImageTexture(name, text);
+    }
+
+    for(auto &item : this->stateJson["texttexture"].items())
+    {
+        // get the name
+        name = item.key();
+        // get the text
+        text = item.value()["text"];
+        // get the color
+        color = item.value()["color"];
+        // get the ttf
+        ttf = item.value()["ttf"];
+
+        TextureManager::Instance()->loadTextTexture(ttf, text, color, name, TextQuality::BLENDED);
+    }
 
     this->gameObjects.push_back(new MenuButton(this->mainViewport.w - 25 - 150, this->mainViewport.w - 25,
-                                               125, 175, "Neu", 0, 0, 85, 170, 255, restartPlay));
+                                               125, 175, "Neu", 0, 0, 85, 170, 255,
+                                               this->functionMap["restartPlay"]));
     this->gameObjects.push_back(new MenuButton(this->mainViewport.w - 25 - 150, this->mainViewport.w - 25,
-                                               200, 250, "Back", 0, 0, 85, 170, 255, gameOverToMain));
+                                               200, 250, "Back", 0, 0, 85, 170, 255,
+                                               this->functionMap["gameOverToMain"]));
 
     return true;
 }

@@ -1,0 +1,71 @@
+{
+    "assets": {
+        "gameOverBackground": {
+            "path": "assets/crystal_heads_1024_768.jpg"
+        }
+    },
+    "buttons": {
+        "Neu": {
+            "x1": 25,
+            "x2": 25,
+            "y1": 25,
+            "y2": 25,
+            "angle": 0,
+            "red": 0,
+            "green": 85,
+            "blue": 170,
+            "alpha": 255,
+            "functionPointer": "restartPlay"
+        },
+        "Back": {
+            "x1": 25,
+            "x2": 25,
+            "y1": 25,
+            "y2": 25,
+            "angle": 0,
+            "red": 0,
+            "green": 85,
+            "blue": 170,
+            "alpha": 255,
+            "functionPointer": "gameOverToMain"
+        }
+    },
+    "color": {
+        "white": {
+            "red": 255,
+            "green": 255,
+            "blue": 255,
+            "alpha": 255
+        }
+    },
+    "music": {
+        "background:": {
+            "path": "music/Beethoven_Moonlight_Sonata_Instrumental.mp3"
+        }
+    },
+    "sound": {
+    },
+    "texttexture": {
+        "Over": {
+            "ttf": "oxyReg30",
+            "text": "He's dead, Jim!",
+            "color": "white"
+        },
+        "Neu": {
+            "ttf": "oxyReg30",
+            "text": "Neu",
+            "color": "white"
+        },
+        "Back": {
+            "ttf": "oxyReg30",
+            "text": "Back",
+            "color": "white"
+        }
+    },
+    "ttf": {
+        "oxyReg30": {
+            "path": "ttf/OxygenRegular.ttf",
+            "size": 30
+        }
+    }
+}
