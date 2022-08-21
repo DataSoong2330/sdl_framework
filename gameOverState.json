@@ -6,10 +6,10 @@
     },
     "buttons": {
         "Neu": {
-            "x1": 25,
-            "x2": 25,
-            "y1": 25,
-            "y2": 25,
+            "width": 150,
+            "height": 50,
+            "xpos": 0,
+            "ypos": 125,
             "angle": 0,
             "red": 0,
             "green": 85,
@@ -18,10 +18,10 @@
             "functionPointer": "restartPlay"
         },
         "Back": {
-            "x1": 25,
-            "x2": 25,
-            "y1": 25,
-            "y2": 25,
+            "width": 150,
+            "height": 50,
+            "xpos": 0,
+            "ypos": 200,
             "angle": 0,
             "red": 0,
             "green": 85,

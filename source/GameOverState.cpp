@@ -29,18 +29,18 @@ void GameOverState::update()
         if(SoundManager::Instance()->isMusicPlaying() &&
            !SoundManager::Instance()->isMusicPaused())
         {
-            std::cout << "Abgespielte Musik wird pausiert" << "\n";
+            Logfile::Instance()->Textout("gameOverState", "music", "Paused");
             SoundManager::Instance()->pauseMusic();
         }
         else if(SoundManager::Instance()->isMusicPaused())
         {
-            std::cout << "Pausierte Musik wird wieder abgespielt" << "\n";
+            Logfile::Instance()->Textout("gameOverState", "music", "resume");
             SoundManager::Instance()->resumeMusic();
         }
         else if(!SoundManager::Instance()->isMusicPaused() &&
                 !SoundManager::Instance()->isMusicPlaying())
         {
-            std::cout << "Musik wird abgespielt" << "\n";
+            Logfile::Instance()->Textout("gameOverState", "music", "stop");
             SoundManager::Instance()->playMusic("music", 0);
         }
     }
@@ -153,12 +153,25 @@ bool GameOverState::onEnter()
         TextureManager::Instance()->loadTextTexture(ttf, text, color, name, TextQuality::BLENDED);
     }
 
-    this->gameObjects.push_back(new MenuButton(this->mainViewport.w - 25 - 150, this->mainViewport.w - 25,
-                                               125, 175, "Neu", 0, 0, 85, 170, 255,
-                                               this->functionMap["restartPlay"]));
-    this->gameObjects.push_back(new MenuButton(this->mainViewport.w - 25 - 150, this->mainViewport.w - 25,
-                                               200, 250, "Back", 0, 0, 85, 170, 255,
-                                               this->functionMap["gameOverToMain"]));
+    for(auto &item : this->stateJson["buttons"].items())
+    {
+        name = item.value()["functionPointer"];
+        text = item.key();
+
+        int width = item.value()["width"];
+        int height = item.value()["height"];
+        int y1 = item.value()["ypos"];
+
+        int x1 = (this->mainViewport.w - width) / 2;
+        int x2 = x1 + width;
+
+        int y2 = y1 + height;
+
+        this->gameObjects.push_back(new MenuButton(x1, x2, y1, y2, text,
+                                                    item.value()["angle"], item.value()["red"],
+                                                    item.value()["green"], item.value()["blue"],
+                                                    item.value()["alpha"], this->functionMap[name]));
+    }
 
     return true;
 }
