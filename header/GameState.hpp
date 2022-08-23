@@ -28,15 +28,24 @@ class GameState
         virtual const std::string getStateID() const = 0;
 
     protected:
+        // all game objects like buttons and such
         std::vector<GameObject*> gameObjects;
         //ButtonCoordinate coordinate;
+
+        // a string vector for all resources which were added on entering the state
+        std::vector<std::string> addedTTF;
+        std::vector<std::string> addedColor;
+        std::vector<std::string> addedMusic;
+        std::vector<std::string> addedTexture;
 
         // sdl rectangle for saving the current screen origin and resolution
         // necessary for aligning buttons and reset to main viewport
         SDL_Rect mainViewport;
 
+        // the state will be parsed into this json object
         nlohmann::json stateJson;
 
+        // maps the function callbacks by a key
         std::map<std::string, std::function<void()>> functionMap;
 
     private:

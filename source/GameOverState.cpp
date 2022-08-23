@@ -7,8 +7,6 @@
 #include "../header/SoundManager.hpp"
 #include "../header/TextureManager.hpp"
 
-#include <iostream>
-
 const std::string GameOverState::gameOverID = "GAMEOVER";
 
 void GameOverState::gameOverToMain()
