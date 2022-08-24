@@ -56,7 +56,9 @@ void GameOverState::update()
 void GameOverState::render()
 {
     // draws the textures with their id and a coordinate
-    TextureManager::Instance()->drawTexture("gameOverBackground", 0, 0);
+    TextureManager::Instance()->drawTexture("gameOverBackground",
+                                            this->stateJson["gameOverBackground"]["coordinates"]["xPos"],
+                                            this->stateJson["gameOverBackground"]["coordinates"]["yPos"]);
     TextureManager::Instance()->drawTexture("Over", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50);
 
     // draws all the game objects
@@ -93,6 +95,8 @@ bool GameOverState::onEnter()
         // get the id
         text = item.key();
 
+        this->musicKeys.push_back(text);
+
         // load with path and key
         SoundManager::Instance()->load(name, text, SoundType::SOUND_MUSIC);
     }
@@ -109,6 +113,8 @@ bool GameOverState::onEnter()
         // get the id
         name = item.key();
 
+        this->colorKeys.push_back(name);
+
         TextureManager::Instance()->loadColor(name, item.value()["red"],
                                                     item.value()["green"],
                                                     item.value()["blue"],
@@ -122,6 +128,8 @@ bool GameOverState::onEnter()
         // get the name
         text = item.key();
 
+        this->ttfKeys.push_back(text);
+
         // load the font with
         TextureManager::Instance()->loadFont(name, item.value()["size"], text);
     }
@@ -132,6 +140,8 @@ bool GameOverState::onEnter()
         name = item.value()["path"];
         // get the id
         text = item.key();
+
+        this->assetKeys.push_back(text);
 
         // load the image with path and id
         TextureManager::Instance()->loadImageTexture(name, text);
@@ -148,6 +158,8 @@ bool GameOverState::onEnter()
         // get the ttf
         ttf = item.value()["ttf"];
 
+        this->texttextureKeys.push_back(name);
+
         TextureManager::Instance()->loadTextTexture(ttf, text, color, name, TextQuality::BLENDED);
     }
 
@@ -155,6 +167,8 @@ bool GameOverState::onEnter()
     {
         name = item.value()["functionPointer"];
         text = item.key();
+
+        this->buttonKeys.push_back(text);
 
         int width = item.value()["width"];
         int height = item.value()["height"];
@@ -177,17 +191,31 @@ bool GameOverState::onEnter()
 bool GameOverState::onExit()
 {
     SoundManager::Instance()->haltMusic();
-    SoundManager::Instance()->removeMusic("music");
 
-    TextureManager::Instance()->removeColor("white");
+    for(auto &item : this->musicKeys)
+    {
+        SoundManager::Instance()->removeMusic(item);
+    }
 
-    TextureManager::Instance()->removeFont("oxyReg30");
+    for(auto &item : this->colorKeys)
+    {
+        TextureManager::Instance()->removeColor(item);
+    }
 
-    TextureManager::Instance()->removeTexture("gameOverBackground");
+    for(auto &item : this->ttfKeys)
+    {
+        TextureManager::Instance()->removeFont(item);
+    }
 
-    TextureManager::Instance()->removeTexture("Over");
-    TextureManager::Instance()->removeTexture("Neu");
-    TextureManager::Instance()->removeTexture("Back");
+    for(auto &item : this->assetKeys)
+    {
+        TextureManager::Instance()->removeTexture(item);
+    }
+
+    for(auto &item : this->texttextureKeys)
+    {
+        TextureManager::Instance()->removeTexture(item);
+    }
 
     InputManager::Instance()->reset();
 

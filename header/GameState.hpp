@@ -33,10 +33,13 @@ class GameState
         //ButtonCoordinate coordinate;
 
         // a string vector for all resources which were added on entering the state
-        std::vector<std::string> addedTTF;
-        std::vector<std::string> addedColor;
-        std::vector<std::string> addedMusic;
-        std::vector<std::string> addedTexture;
+        std::vector<std::string> assetKeys;
+        std::vector<std::string> buttonKeys;
+        std::vector<std::string> colorKeys;
+        std::vector<std::string> musicKeys;
+        std::vector<std::string> soundKeys;
+        std::vector<std::string> texttextureKeys;
+        std::vector<std::string> ttfKeys;
 
         // sdl rectangle for saving the current screen origin and resolution
         // necessary for aligning buttons and reset to main viewport
