@@ -203,7 +203,7 @@ bool GameOverState::onEnter()
     int screenHeight = 0;
     SDL_GetWindowSize(Game::Instance()->getWindow(), &screenWidth, &screenHeight);
 
-    /*for(auto &item : this->stateJson["viewports"].items())
+    for(auto &item : this->stateJson["viewports"].items())
     {
         int viewportWidth = 0;
         int viewportHeight = 0;
@@ -218,7 +218,7 @@ bool GameOverState::onEnter()
 
         TextureManager::Instance()->addViewport(item.value()["xPos"], item.value()["yPos"],
                                                     viewportWidth, viewportHeight, text, name);
-    }*/
+    }
 
     return true;
 }
@@ -250,6 +250,11 @@ bool GameOverState::onExit()
     for(auto &item : this->texttextureKeys)
     {
         TextureManager::Instance()->removeTexture(item);
+    }
+
+    for(auto &item : this->viewportKeys)
+    {
+        TextureManager::Instance()->removeViewport(item);
     }
 
     InputManager::Instance()->reset();
