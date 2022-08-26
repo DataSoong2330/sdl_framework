@@ -40,10 +40,11 @@ class GameState
         std::vector<std::string> soundKeys;
         std::vector<std::string> texttextureKeys;
         std::vector<std::string> ttfKeys;
+        std::vector<std::string> viewportKeys;
 
         // sdl rectangle for saving the current screen origin and resolution
         // necessary for aligning buttons and reset to main viewport
-        SDL_Rect mainViewport;
+        SDL_Rect screenSize;
 
         // the state will be parsed into this json object
         nlohmann::json stateJson;

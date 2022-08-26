@@ -27,19 +27,19 @@ void GameOverState::update()
         if(SoundManager::Instance()->isMusicPlaying() &&
            !SoundManager::Instance()->isMusicPaused())
         {
-            Logfile::Instance()->Textout("gameOverState", "music", "Paused");
+            Logfile::Instance()->Textout("gameOverState", "background", "Paused");
             SoundManager::Instance()->pauseMusic();
         }
         else if(SoundManager::Instance()->isMusicPaused())
         {
-            Logfile::Instance()->Textout("gameOverState", "music", "resume");
+            Logfile::Instance()->Textout("gameOverState", "background", "resume");
             SoundManager::Instance()->resumeMusic();
         }
         else if(!SoundManager::Instance()->isMusicPaused() &&
                 !SoundManager::Instance()->isMusicPlaying())
         {
-            Logfile::Instance()->Textout("gameOverState", "music", "stop");
-            SoundManager::Instance()->playMusic("music", 0);
+            Logfile::Instance()->Textout("gameOverState", "background", "stop");
+            SoundManager::Instance()->playMusic("background", 0);
         }
     }
     if(InputManager::Instance()->isKeyPressed(SDL_SCANCODE_ESCAPE))
@@ -55,11 +55,12 @@ void GameOverState::update()
 
 void GameOverState::render()
 {
+    ;
     // draws the textures with their id and a coordinate
     TextureManager::Instance()->drawTexture("gameOverBackground",
-                                            this->stateJson["gameOverBackground"]["coordinates"]["xPos"],
-                                            this->stateJson["gameOverBackground"]["coordinates"]["yPos"]);
-    TextureManager::Instance()->drawTexture("Over", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50);
+                                            this->stateJson["assets"]["gameOverBackground"]["coordinates"]["xPos"],
+                                            this->stateJson["assets"]["gameOverBackground"]["coordinates"]["yPos"]);
+    TextureManager::Instance()->drawTexture("Over", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -71,11 +72,15 @@ void GameOverState::render()
 
 bool GameOverState::onEnter()
 {
-    std::ifstream jsonFile("gameOverState.json");
+    std::ifstream jsonFile("states/gameOverState.json");
     nlohmann::json name, text, color, ttf;
 
     this->functionMap["gameOverToMain"] = gameOverToMain;
     this->functionMap["restartPlay"] = restartPlay;
+
+    // gets the current screen size, necessary for alignment of the buttons and textures
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->screenSize.w, &this->screenSize.h);
+    this->screenSize.x = this->screenSize.y = 0;
 
     if(jsonFile)
     {
@@ -83,7 +88,7 @@ bool GameOverState::onEnter()
     }
     else
     {
-        Logfile::Instance()->Textout("GameState", "gameState.json", "failed to load");
+        Logfile::Instance()->Textout("GameState", "states/gameOverState.json", "failed to load");
     }
 
     InputManager::Instance()->reset();
@@ -101,11 +106,20 @@ bool GameOverState::onEnter()
         SoundManager::Instance()->load(name, text, SoundType::SOUND_MUSIC);
     }
 
-    SoundManager::Instance()->playMusic("music", 0);
+    SoundManager::Instance()->playMusic("background", 0);
 
-    // gets the current screen size, necessary for alignment of the buttons and textures
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
-    this->mainViewport.x = this->mainViewport.y = 0;
+    for(auto &item : this->stateJson["sound"].items())
+    {
+        // get the path
+        name = item.value()["path"];
+        // get the id
+        text = item.key();
+
+        this->soundKeys.push_back(text);
+
+        // load with path and key
+        SoundManager::Instance()->load(name, text, SoundType::SOUND_SFX);
+    }
 
     // loading of colors, fonts and textures
     for(auto &item : this->stateJson["color"].items())
@@ -174,7 +188,7 @@ bool GameOverState::onEnter()
         int height = item.value()["height"];
         int y1 = item.value()["ypos"];
 
-        int x1 = (this->mainViewport.w - width) / 2;
+        int x1 = (this->screenSize.w - width) / 2;
         int x2 = x1 + width;
 
         int y2 = y1 + height;
@@ -184,6 +198,27 @@ bool GameOverState::onEnter()
                                                     item.value()["green"], item.value()["blue"],
                                                     item.value()["alpha"], this->functionMap[name]));
     }
+
+    int screenWidth = 0;
+    int screenHeight = 0;
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &screenWidth, &screenHeight);
+
+    /*for(auto &item : this->stateJson["viewports"].items())
+    {
+        int viewportWidth = 0;
+        int viewportHeight = 0;
+
+        text = item.key();
+        name = item.value()["texture"];
+
+        this->viewportKeys.push_back(text);
+
+        viewportWidth = item.value()["width"];
+        viewportHeight = screenHeight;
+
+        TextureManager::Instance()->addViewport(item.value()["xPos"], item.value()["yPos"],
+                                                    viewportWidth, viewportHeight, text, name);
+    }*/
 
     return true;
 }

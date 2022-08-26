@@ -36,7 +36,7 @@ void PlayState::render()
 {
     // draws the textures with their id and a coordinate
     TextureManager::Instance()->drawTexture("playBackground", 0, 0);
-    TextureManager::Instance()->drawTexture("Playing", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("Playing")) / 2, 50);
+    TextureManager::Instance()->drawTexture("Playing", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Playing")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -52,8 +52,8 @@ bool PlayState::onEnter()
     InputManager::Instance()->reset();
 
     // gets the current screen size, necessary for alignment of the buttons and textures
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
-    this->mainViewport.x = this->mainViewport.y = 0;
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->screenSize.w, &this->screenSize.h);
+    this->screenSize.x = this->screenSize.y = 0;
 
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);

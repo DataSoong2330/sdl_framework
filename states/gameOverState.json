@@ -6,6 +6,13 @@
                 "xPos": 0,
                 "yPos": 0
             }
+        },
+        "none": {
+            "path": "nullptr",
+            "coordinates": {
+                "xPos": 0,
+                "yPos": 0
+            }
         }
     },
     "buttons": {
@@ -43,7 +50,7 @@
         }
     },
     "music": {
-        "background:": {
+        "background": {
             "path": "music/Beethoven_Moonlight_Sonata_Instrumental.mp3"
         }
     },
@@ -76,22 +83,16 @@
         "menu": {
             "xPos": 0,
             "yPos": 0,
+            "width": 170,
             "height": 0,
-            "width": 0,
-            "red": 0,
-            "green": 0,
-            "blue": 0,
-            "alpha": 255
+            "texture": "none"
         },
         "screen": {
-            "xPos": 0,
+            "xPos": 170,
             "yPos": 0,
+            "width": 470,
             "height": 0,
-            "width": 0,
-            "red": 0,
-            "green": 0,
-            "blue": 0,
-            "alpha": 255
+            "texture": "gameOverBackground"
         }
     }
 }

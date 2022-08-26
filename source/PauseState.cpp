@@ -30,7 +30,7 @@ void PauseState::render()
 {
     // draws the textures with their id and a coordinate
     TextureManager::Instance()->drawTexture("pauseBackground", 0, 0);
-    TextureManager::Instance()->drawTexture("PauseState", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("PauseState")) / 2, 50);
+    TextureManager::Instance()->drawTexture("PauseState", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("PauseState")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -46,8 +46,8 @@ bool PauseState::onEnter()
     InputManager::Instance()->reset();
 
     // gets the current screen size, necessary for alignment of the buttons and textures
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
-    this->mainViewport.x = this->mainViewport.y = 0;
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->screenSize.w, &this->screenSize.h);
+    this->screenSize.x = this->screenSize.y = 0;
 
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
@@ -60,10 +60,10 @@ bool PauseState::onEnter()
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Resume", "white", "Resume", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Menu", "white", "Back", TextQuality::BLENDED);
 
-    this->gameObjects.push_back(new MenuButton(this->mainViewport.w / 2 - 75, this->mainViewport.w / 2 + 75,
+    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
                                                125, 175, "Resume", 0, 0, 85, 170, 255, resumePlay));
 
-    this->gameObjects.push_back(new MenuButton(this->mainViewport.w / 2 - 75, this->mainViewport.w / 2 + 75,
+    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
                                                200, 250, "Back", 0, 0, 85, 170, 255, pauseToMain));
 
     return true;

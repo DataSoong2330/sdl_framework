@@ -5,7 +5,7 @@
 // ctor initializes members
 Texture::Texture()
 {
-    this->texture = NULL;
+    this->texture = nullptr;
     this->height = 0;
     this->width = 0;
 }
@@ -165,8 +165,9 @@ void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* cent
     SDL_RenderCopyEx(Game::Instance()->getRenderer(), this->texture, clip, &renderQuad, angle, center, flip);
 }
 
+// render the port to the screen
 void Texture::renderPort(const SDL_Rect* portDimension)
 {
     SDL_RenderSetViewport(Game::Instance()->getRenderer(), portDimension);
-    SDL_RenderCopy(Game::Instance()->getRenderer(), this->texture, NULL, NULL);
+    SDL_RenderCopy(Game::Instance()->getRenderer(), this->texture, nullptr, nullptr);
 }

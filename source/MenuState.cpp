@@ -64,9 +64,9 @@ void MenuState::render()
     //TextureManager::Instance()->drawTexture("background", 0, 0);
     TextureManager::Instance()->renderViewports();
 
-    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &this->mainViewport);
+    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &this->screenSize);
 
-    TextureManager::Instance()->drawTexture("Titel", (this->mainViewport.w - TextureManager::Instance()->getWidthOfTexture("Titel")) / 2, 50);
+    TextureManager::Instance()->drawTexture("Titel", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Titel")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -82,31 +82,32 @@ bool MenuState::onEnter()
     InputManager::Instance()->reset();
 
     // gets the current screen size, necessary for alignment of the buttons and textures
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->mainViewport.w, &this->mainViewport.h);
-    this->mainViewport.x = this->mainViewport.y = 0;
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &this->screenSize.w, &this->screenSize.h);
+    this->screenSize.x = this->screenSize.y = 0;
 
     // loading a sound and starts playing it
     SoundManager::Instance()->load("music/Bach_Air_On_the_G_String.mp3", "music", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->playMusic("music", 0);
 
-    TextureManager::Instance()->addViewport(0, 0, this->mainViewport.w/2, this->mainViewport.h, "leftViewport", "background");
-    TextureManager::Instance()->addViewport(this->mainViewport.w/2, 0, this->mainViewport.w/2, this->mainViewport.h, "rightViewport", "background");
-    
+    TextureManager::Instance()->addViewport(0, 0, this->screenSize.w/2, this->screenSize.h, "leftViewport", "background");
+    TextureManager::Instance()->addViewport(this->screenSize.w/2, 0, this->screenSize.w/2, this->screenSize.h, "rightViewport", "background");
+
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);
 
     TextureManager::Instance()->loadFont("ttf/OxygenRegular.ttf", 30, "oxyReg30");
 
     TextureManager::Instance()->loadImageTexture("assets/space_galaxy_shine_1024x768.jpg", "background");
+    TextureManager::Instance()->loadImageTexture("nullptr", "none");
 
     TextureManager::Instance()->loadTextTexture("oxyReg30", "SDL Framework (in development)", "white", "Titel", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Play", "white", "Play", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Exit", "white", "Exit", TextQuality::BLENDED);
 
-    this->gameObjects.push_back(new MenuButton(this->mainViewport.w / 2 - 75, this->mainViewport.w / 2 + 75,
+    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
                                                125, 175, "Play", 0.0, 0, 85, 170, 255, menuToPlay));
 
-    this->gameObjects.push_back(new MenuButton(this->mainViewport.w / 2 - 75, this->mainViewport.w / 2 + 75,
+    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
                                                200, 250, "Exit", 0.0, 0, 85, 170, 255, exitFromMenu));
 
     return true;

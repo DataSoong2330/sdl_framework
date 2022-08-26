@@ -96,21 +96,28 @@ bool TextureManager::loadImageTexture(std::string path, std::string textureID, b
     bool success = false;
     Texture* texture = nullptr;
 
-    texture = this->textures[textureID];
-
-    if(texture == nullptr)
+    if(textureID == "none")
     {
-        texture = new Texture();
-
-        if(texture != nullptr)
-        {
-            success = texture->loadFromFile(path);
-            this->textures[textureID] = texture;
-        }
+        this->textures[textureID] = new Texture();
     }
     else
     {
-        success = texture->loadFromFile(path);
+        texture = this->textures[textureID];
+
+        if(texture == nullptr)
+        {
+            texture = new Texture();
+
+            if(texture != nullptr)
+            {
+                success = texture->loadFromFile(path);
+                this->textures[textureID] = texture;
+            }
+        }
+        else
+        {
+            success = texture->loadFromFile(path);
+        }
     }
 
     return success;
@@ -195,12 +202,18 @@ void TextureManager::renderViewports()
 {
     if(this->viewports.size() > 0)
     {
-        Texture* texture = NULL;
-        for(this->viewportIterator = this->viewports.begin();
+        Texture* texture = nullptr;
+        /*for(this->viewportIterator = this->viewports.begin();
             this->viewportIterator != this->viewports.end(); this->viewportIterator++)
         {
             texture = this->textures[this->viewportIterator->second->getKeyOfTexture()];
             texture->renderPort(this->viewportIterator->second->getViewportRect());
+        }*/
+
+        for(const auto &item : this->viewports)
+        {
+            texture = this->textures[item.second->getKeyOfTexture()];
+            texture->renderPort(item.second->getViewportRect());
         }
     }
 }
