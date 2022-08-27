@@ -49,13 +49,16 @@ void GameOverState::update()
             SoundManager::Instance()->haltMusic();
     }
 
-    for(unsigned i = 0; i < this->gameObjects.size(); i++)
-        this->gameObjects[i]->update();
+    // draws all the game objects
+    if(this->gameObjects.size() > 0)
+    {
+        for(unsigned i = 0; i < this->gameObjects.size(); i++)
+            this->gameObjects[i]->update();
+    }
 }
 
 void GameOverState::render()
 {
-    ;
     // draws the textures with their id and a coordinate
     TextureManager::Instance()->drawTexture("gameOverBackground",
                                             this->stateJson["assets"]["gameOverBackground"]["coordinates"]["xPos"],
@@ -177,6 +180,12 @@ bool GameOverState::onEnter()
         TextureManager::Instance()->loadTextTexture(ttf, text, color, name, TextQuality::BLENDED);
     }
 
+    int screenWidth = 0;
+    int screenHeight = 0;
+    int distance = 0;
+    SDL_GetWindowSize(Game::Instance()->getWindow(), &screenWidth, &screenHeight);
+    float percentage = 0.0f;
+
     for(auto &item : this->stateJson["buttons"].items())
     {
         name = item.value()["functionPointer"];
@@ -184,24 +193,26 @@ bool GameOverState::onEnter()
 
         this->buttonKeys.push_back(text);
 
-        int width = item.value()["width"];
-        int height = item.value()["height"];
-        int y1 = item.value()["ypos"];
+        percentage = (float)this->stateJson["viewports"]["menu"]["relativeSize"] / 100.0f;
+        int width = screenWidth * percentage;
+        int height = screenHeight * percentage;
 
-        int x1 = (this->screenSize.w - width) / 2;
-        int x2 = x1 + width;
+        percentage = (float)item.value()["relativeSize"] / 100.0f;
+        distance = width * (1.0f - percentage);
+        width = width * (1.0f - percentage);
+        height = height * (1.0f - percentage);
 
+        int y1 = distance + height * this->gameObjects.size();
         int y2 = y1 + height;
 
-        this->gameObjects.push_back(new MenuButton(x1, x2, y1, y2, text,
+        int x1 = distance;
+        int x2 = x1 + width;
+
+        this->gameObjects.push_back(new MenuButton( x1, x2, y1, y2, text,
                                                     item.value()["angle"], item.value()["red"],
                                                     item.value()["green"], item.value()["blue"],
                                                     item.value()["alpha"], this->functionMap[name]));
     }
-
-    int screenWidth = 0;
-    int screenHeight = 0;
-    SDL_GetWindowSize(Game::Instance()->getWindow(), &screenWidth, &screenHeight);
 
     for(auto &item : this->stateJson["viewports"].items())
     {
@@ -213,7 +224,8 @@ bool GameOverState::onEnter()
 
         this->viewportKeys.push_back(text);
 
-        viewportWidth = item.value()["width"];
+        percentage = (float)(item.value()["relativeSize"]) / 100.0f;
+        viewportWidth = screenWidth * percentage;
         viewportHeight = screenHeight;
 
         TextureManager::Instance()->addViewport(item.value()["xPos"], item.value()["yPos"],
@@ -256,6 +268,13 @@ bool GameOverState::onExit()
     {
         TextureManager::Instance()->removeViewport(item);
     }
+
+    for(auto &item : this->gameObjects)
+    {
+        delete item;
+    }
+
+    this->gameObjects.clear();
 
     InputManager::Instance()->reset();
 

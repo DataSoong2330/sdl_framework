@@ -182,6 +182,7 @@ void TextureManager::drawTexture(std::string textureID, int x, int y, SDL_Rect* 
 // renders a box to the screen
 void TextureManager::drawBox(int x1, int x2, int y1, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
+    //SDL_RenderCopy(Game::Instance()->getRenderer(), nullptr, nullptr, this->viewports["menu"]->getViewportRect());
     boxRGBA(Game::Instance()->getRenderer(), x1, y1, x2, y2, r, g, b, a);
 }
 
@@ -203,12 +204,6 @@ void TextureManager::renderViewports()
     if(this->viewports.size() > 0)
     {
         Texture* texture = nullptr;
-        /*for(this->viewportIterator = this->viewports.begin();
-            this->viewportIterator != this->viewports.end(); this->viewportIterator++)
-        {
-            texture = this->textures[this->viewportIterator->second->getKeyOfTexture()];
-            texture->renderPort(this->viewportIterator->second->getViewportRect());
-        }*/
 
         for(const auto &item : this->viewports)
         {

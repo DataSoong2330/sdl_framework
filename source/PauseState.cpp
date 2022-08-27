@@ -81,6 +81,13 @@ bool PauseState::onExit()
     TextureManager::Instance()->removeTexture("Resume");
     TextureManager::Instance()->removeTexture("Back");
 
+    for(auto &item : this->gameObjects)
+    {
+        delete item;
+    }
+
+    this->gameObjects.clear();
+
     InputManager::Instance()->reset();
 
     return true;

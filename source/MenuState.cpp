@@ -131,8 +131,10 @@ bool MenuState::onExit()
     TextureManager::Instance()->removeViewport("leftViewport");
     TextureManager::Instance()->removeViewport("rightViewport");
 
-    for(unsigned i = 0; i < this->gameObjects.size(); i++)
-        delete this->gameObjects[i];
+    for(auto &item : this->gameObjects)
+    {
+        delete item;
+    }
 
     this->gameObjects.clear();
 

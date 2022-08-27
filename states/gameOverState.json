@@ -26,7 +26,8 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "restartPlay"
+            "functionPointer": "restartPlay",
+            "relativeSize": 10
         },
         "Back": {
             "width": 150,
@@ -38,7 +39,8 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "gameOverToMain"
+            "functionPointer": "gameOverToMain",
+            "relativeSize": 10
         }
     },
     "color": {
@@ -85,14 +87,16 @@
             "yPos": 0,
             "width": 170,
             "height": 0,
-            "texture": "none"
+            "texture": "none",
+            "relativeSize": 20
         },
         "screen": {
             "xPos": 170,
             "yPos": 0,
             "width": 470,
             "height": 0,
-            "texture": "gameOverBackground"
+            "texture": "gameOverBackground",
+            "relativeSize": 80
         }
     }
 }

@@ -27,8 +27,11 @@ void PlayState::returnToMenu()
 // update the state
 void PlayState::update()
 {
-    for(unsigned i = 0; i < this->gameObjects.size(); i++)
+    if(this->gameObjects.size())
+    {
+        for(unsigned i = 0; i < this->gameObjects.size(); i++)
         this->gameObjects[i]->update();
+    }
 }
 
 // render the state
@@ -90,8 +93,10 @@ bool PlayState::onExit()
     TextureManager::Instance()->removeTexture("Dead");
     TextureManager::Instance()->removeTexture("Return");
 
-    for(unsigned i = 0; i < this->gameObjects.size(); i++)
-        delete this->gameObjects[i];
+    for(auto &item : this->gameObjects)
+    {
+        delete item;
+    }
 
     this->gameObjects.clear();
 
