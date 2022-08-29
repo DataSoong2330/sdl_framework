@@ -150,9 +150,25 @@ bool TextureManager::loadTextTexture(std::string fontID, std::string text, std::
 }
 
 // adds a viewport to the map
-void TextureManager::addViewport(int x, int y, int w, int h, std::string keyOfViewport, std::string keyOfTexture)
+void TextureManager::addViewport(SDL_Rect &viewport, std::string keyOfViewport)
 {
-    this->viewports[keyOfViewport] = new Viewport(x, y, w, h, keyOfTexture);
+    SDL_Rect view;
+    view.x = viewport.x;
+    view.y = viewport.y;
+    view.w = viewport.w;
+    view.h = viewport.h;
+    this->viewports[keyOfViewport] = view;
+}
+
+// adds a viewport to the map
+void TextureManager::addViewport(int x, int y, int w, int h, std::string keyOfViewport)
+{
+    SDL_Rect view;
+    view.x = x;
+    view.y = y;
+    view.w = w;
+    view.h = h;
+    this->viewports[keyOfViewport] = view;
 }
 
 // changes the color of a texture, for example a text
@@ -174,43 +190,30 @@ void TextureManager::setAlphaOfTexture(std::string textureID, Uint8 alpha)
 }
 
 // renders a texture to the screen
-void TextureManager::drawTexture(std::string textureID, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void TextureManager::drawTexture(std::string textureID, int x, int y, SDL_Rect* clip, std::string viewportID, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
-    this->textures[textureID]->render(x, y, clip, angle, center, flip);
+    this->textures[textureID]->render(x, y, clip, this->viewports[viewportID], angle, center, flip);
 }
 
 // renders a box to the screen
-void TextureManager::drawBox(int x1, int x2, int y1, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void TextureManager::drawBox(std::string viewportID, int x1, int x2, int y1, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
-    //SDL_RenderCopy(Game::Instance()->getRenderer(), nullptr, nullptr, this->viewports["menu"]->getViewportRect());
+    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &this->viewports[viewportID]);
     boxRGBA(Game::Instance()->getRenderer(), x1, y1, x2, y2, r, g, b, a);
 }
 
 // renders a circle to the screen
-void TextureManager::drawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void TextureManager::drawCircle(std::string viewportID, int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
+    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &this->viewports[viewportID]);
     circleRGBA(Game::Instance()->getRenderer(), x, y, radius, r, g, b, a);
 }
 
-// renders a ellipse to the screen
-void TextureManager::drawEllipse(int x, int y, int rx, int ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+// renders an ellipse to the screen
+void TextureManager::drawEllipse(std::string viewportID, int x, int y, int rx, int ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
+    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &this->viewports[viewportID]);
     ellipseRGBA(Game::Instance()->getRenderer(), x, y, rx, ry, r, g, b, a);
-}
-
-// renders all viewports to the screen
-void TextureManager::renderViewports()
-{
-    if(this->viewports.size() > 0)
-    {
-        Texture* texture = nullptr;
-
-        for(const auto &item : this->viewports)
-        {
-            texture = this->textures[item.second->getKeyOfTexture()];
-            texture->renderPort(item.second->getViewportRect());
-        }
-    }
 }
 
 // removes a texture from the manager

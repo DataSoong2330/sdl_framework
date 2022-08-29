@@ -149,10 +149,14 @@ void Texture::setAlpha(Uint8 alpha)
 }
 
 // renders the texture to the screen
-void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void Texture::render(int x, int y, SDL_Rect* clip, SDL_Rect viewport, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
+    SDL_Rect renderQuad;
     // sets the quad where the texture is rendered to
-    SDL_Rect renderQuad = { x, y, this->width, this->height };
+    if(this->width > viewport.w && this->height > viewport.h)
+        renderQuad = { x, y, viewport.w, viewport.h };
+    else
+        renderQuad = { x, y, this->width, this->height };
 
     // if the texture shall be clipped
     if(clip != NULL)
@@ -161,13 +165,7 @@ void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* cent
         renderQuad.h = clip->h;
     }
 
+    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &viewport);
     // the render function
     SDL_RenderCopyEx(Game::Instance()->getRenderer(), this->texture, clip, &renderQuad, angle, center, flip);
-}
-
-// render the port to the screen
-void Texture::renderPort(const SDL_Rect* portDimension)
-{
-    SDL_RenderSetViewport(Game::Instance()->getRenderer(), portDimension);
-    SDL_RenderCopy(Game::Instance()->getRenderer(), this->texture, nullptr, nullptr);
 }

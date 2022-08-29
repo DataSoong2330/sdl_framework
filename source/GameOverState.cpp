@@ -62,8 +62,10 @@ void GameOverState::render()
     // draws the textures with their id and a coordinate
     TextureManager::Instance()->drawTexture("gameOverBackground",
                                             this->stateJson["assets"]["gameOverBackground"]["coordinates"]["xPos"],
-                                            this->stateJson["assets"]["gameOverBackground"]["coordinates"]["yPos"]);
-    TextureManager::Instance()->drawTexture("Over", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50);
+                                            this->stateJson["assets"]["gameOverBackground"]["coordinates"]["yPos"],
+                                            NULL, "screen");
+    TextureManager::Instance()->drawTexture("Over", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50,
+                                            NULL, "screen");
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -229,7 +231,7 @@ bool GameOverState::onEnter()
         viewportHeight = screenHeight;
 
         TextureManager::Instance()->addViewport(item.value()["xPos"], item.value()["yPos"],
-                                                    viewportWidth, viewportHeight, text, name);
+                                                    viewportWidth, viewportHeight, text);
     }
 
     return true;

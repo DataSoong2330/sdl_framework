@@ -37,10 +37,10 @@ MenuButton::~MenuButton()
 
 void MenuButton::draw()
 {
-    TextureManager::Instance()->drawBox(this->x1, this->x2, this->y1, this->y2,
+    TextureManager::Instance()->drawBox("menu", this->x1, this->x2, this->y1, this->y2,
                                         this->r, this->g, this->b, this->a);
 
-    TextureManager::Instance()->drawTexture(this->textureID, this->x, this->y);
+    TextureManager::Instance()->drawTexture(this->textureID, this->x, this->y, NULL, "menu");
 }
 
 void MenuButton::update()

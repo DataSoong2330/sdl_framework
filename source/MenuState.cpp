@@ -61,12 +61,11 @@ void MenuState::update()
 void MenuState::render()
 {
     // draws the textures with their id and a coordinate
-    //TextureManager::Instance()->drawTexture("background", 0, 0);
-    TextureManager::Instance()->renderViewports();
+    //SDL_RenderSetViewport(Game::Instance()->getRenderer(), );
 
-    SDL_RenderSetViewport(Game::Instance()->getRenderer(), &this->screenSize);
+    TextureManager::Instance()->drawTexture("background", 0, 0, nullptr, "main");
+    TextureManager::Instance()->drawTexture("Titel", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Titel")) / 2, 50, NULL, "main");
 
-    TextureManager::Instance()->drawTexture("Titel", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Titel")) / 2, 50);
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -89,8 +88,8 @@ bool MenuState::onEnter()
     SoundManager::Instance()->load("music/Bach_Air_On_the_G_String.mp3", "music", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->playMusic("music", 0);
 
-    TextureManager::Instance()->addViewport(0, 0, this->screenSize.w/2, this->screenSize.h, "leftViewport", "background");
-    TextureManager::Instance()->addViewport(this->screenSize.w/2, 0, this->screenSize.w/2, this->screenSize.h, "rightViewport", "background");
+    TextureManager::Instance()->addViewport(170, 0, this->screenSize.w, this->screenSize.h, "main");
+    TextureManager::Instance()->addViewport(0, 0, 170, this->screenSize.h, "menu");
 
     // loading of colors, fonts and textures
     TextureManager::Instance()->loadColor("white", 255, 255, 255, 255);

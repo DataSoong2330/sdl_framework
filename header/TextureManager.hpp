@@ -33,7 +33,8 @@ class TextureManager
         bool loadTextTexture(std::string fontID, std::string text, std::string colorID, std::string textureID, TextQuality textQuality = TextQuality::SOLID);
 
         // adds a viewport to the map
-        void addViewport(int x, int y, int w, int h, std::string keyOfViewport, std::string keyOfTexture);
+        void addViewport(int x, int y, int w, int h, std::string keyOfViewport);
+        void addViewport(SDL_Rect &viewport, std::string keyOfViewport);
 
         // changes the color of a texture
         void setColorOfTexture(std::string textureID, std::string colorID);
@@ -48,16 +49,14 @@ class TextureManager
         inline const int getWidthOfTexture(std::string textureID) { return this->textures[textureID]->getWidth(); }
 
         // draws a texture to the screen
-        void drawTexture(std::string textureID, int x, int y, SDL_Rect* clip = NULL, double angle = 0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+        void drawTexture(std::string textureID, int x, int y, SDL_Rect* clip = NULL, std::string viewportID = "screen",
+                        double angle = 0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
         // draws a box to the screen
-        void drawBox(int x1, int x2, int y1, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+        void drawBox(std::string viewportID, int x1, int x2, int y1, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
         // draws a circle to the screen
-        void drawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+        void drawCircle(std::string viewportID, int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
         // draws a ellipse to the screen
-        void drawEllipse(int x, int y, int rx, int ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-
-        // render all viewports to the screen
-        void renderViewports();
+        void drawEllipse(std::string viewportID, int x, int y, int rx, int ry, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
         // removes a texture from the manager
         void removeTexture(std::string id);
@@ -84,8 +83,7 @@ class TextureManager
         std::map<std::string, Texture*> textures;
         std::map<std::string, SDL_Color> colors;
         std::map<std::string, TTF_Font*> fonts;
-        std::map<std::string, Viewport*> viewports;
-        std::map<std::string, Viewport*>::iterator viewportIterator;
+        std::map<std::string, SDL_Rect> viewports;
 };
 
 #endif // __TEXTUREMANAGER__

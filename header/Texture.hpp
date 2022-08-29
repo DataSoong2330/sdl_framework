@@ -41,8 +41,7 @@ class Texture
         // clip means to render not the complete texture, not the hole thingy
         // angle for rotation, center is the middle of the render point
         // flip HORIZONZAL or VERTICAL
-        void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-        void renderPort(const SDL_Rect* portDimension);
+        void render(int x, int y, SDL_Rect* clip = nullptr, SDL_Rect viewport = {0}, double angle = 0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
         // get the dimensions
         inline const int& getHeight() const { return this->height; }

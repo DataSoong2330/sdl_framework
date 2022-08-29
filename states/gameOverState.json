@@ -5,14 +5,16 @@
             "coordinates": {
                 "xPos": 0,
                 "yPos": 0
-            }
+            },
+            "viewport": "screen"
         },
         "none": {
             "path": "nullptr",
             "coordinates": {
                 "xPos": 0,
                 "yPos": 0
-            }
+            },
+            "viewport": "menu"
         }
     },
     "buttons": {
@@ -27,7 +29,8 @@
             "blue": 170,
             "alpha": 255,
             "functionPointer": "restartPlay",
-            "relativeSize": 10
+            "relativeSize": 10,
+            "viewport": "menu"
         },
         "Back": {
             "width": 150,
@@ -40,7 +43,8 @@
             "blue": 170,
             "alpha": 255,
             "functionPointer": "gameOverToMain",
-            "relativeSize": 10
+            "relativeSize": 10,
+            "viewport": "menu"
         }
     },
     "color": {
@@ -62,17 +66,20 @@
         "Over": {
             "ttf": "oxyReg30",
             "text": "He's dead, Jim!",
-            "color": "white"
+            "color": "white",
+            "viewport": "screen"
         },
         "Neu": {
             "ttf": "oxyReg30",
             "text": "Neu",
-            "color": "white"
+            "color": "white",
+            "viewport": "menu"
         },
         "Back": {
             "ttf": "oxyReg30",
             "text": "Back",
-            "color": "white"
+            "color": "white",
+            "viewport": "menu"
         }
     },
     "ttf": {
