@@ -29,10 +29,11 @@
             "blue": 170,
             "alpha": 255,
             "functionPointer": "restartPlay",
-            "relativeSize": 10,
+            "relativeSizeX": 10,
+            "relativeSizeY": 2,
             "viewport": "menu"
         },
-        "Back": {
+        "Menü": {
             "width": 150,
             "height": 50,
             "xpos": 0,
@@ -43,7 +44,8 @@
             "blue": 170,
             "alpha": 255,
             "functionPointer": "gameOverToMain",
-            "relativeSize": 10,
+            "relativeSizeX": 10,
+            "relativeSizeY": 2,
             "viewport": "menu"
         }
     },
@@ -75,9 +77,9 @@
             "color": "white",
             "viewport": "menu"
         },
-        "Back": {
+        "Menü": {
             "ttf": "oxyReg30",
-            "text": "Back",
+            "text": "Menü",
             "color": "white",
             "viewport": "menu"
         }

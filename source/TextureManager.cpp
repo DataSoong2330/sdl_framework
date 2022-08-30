@@ -171,6 +171,12 @@ void TextureManager::addViewport(int x, int y, int w, int h, std::string keyOfVi
     this->viewports[keyOfViewport] = view;
 }
 
+// gets a viewport from the map
+SDL_Rect& TextureManager::getViewport(std::string viewportID)
+{
+    return this->viewports[viewportID];
+}
+
 // changes the color of a texture, for example a text
 void TextureManager::setColorOfTexture(std::string textureID, std::string colorID)
 {

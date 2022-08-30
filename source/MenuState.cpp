@@ -61,11 +61,9 @@ void MenuState::update()
 void MenuState::render()
 {
     // draws the textures with their id and a coordinate
-    //SDL_RenderSetViewport(Game::Instance()->getRenderer(), );
 
     TextureManager::Instance()->drawTexture("background", 0, 0, nullptr, "main");
     TextureManager::Instance()->drawTexture("Titel", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Titel")) / 2, 50, NULL, "main");
-
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -99,15 +97,12 @@ bool MenuState::onEnter()
     TextureManager::Instance()->loadImageTexture("assets/space_galaxy_shine_1024x768.jpg", "background");
     TextureManager::Instance()->loadImageTexture("nullptr", "none");
 
-    TextureManager::Instance()->loadTextTexture("oxyReg30", "SDL Framework (in development)", "white", "Titel", TextQuality::BLENDED);
+    TextureManager::Instance()->loadTextTexture("oxyReg30", "SDL Framework", "white", "Titel", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Play", "white", "Play", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Exit", "white", "Exit", TextQuality::BLENDED);
 
-    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
-                                               125, 175, "Play", 0.0, 0, 85, 170, 255, menuToPlay));
-
-    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
-                                               200, 250, "Exit", 0.0, 0, 85, 170, 255, exitFromMenu));
+    this->gameObjects.push_back(new MenuButton(10, 160, 10, 60, "Play", 0.0, 0, 85, 170, 255, menuToPlay));
+    this->gameObjects.push_back(new MenuButton(10, 160, 70, 120, "Exit", 0.0, 0, 85, 170, 255, exitFromMenu));
 
     return true;
 }

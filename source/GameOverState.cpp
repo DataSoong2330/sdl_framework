@@ -89,7 +89,7 @@ bool GameOverState::onEnter()
 
     if(jsonFile)
     {
-        this->stateJson = nlohmann::json::parse(jsonFile);
+        this->stateJson = nlohmann::ordered_json::parse(jsonFile);
     }
     else
     {
@@ -184,37 +184,9 @@ bool GameOverState::onEnter()
 
     int screenWidth = 0;
     int screenHeight = 0;
-    int distance = 0;
     SDL_GetWindowSize(Game::Instance()->getWindow(), &screenWidth, &screenHeight);
-    float percentage = 0.0f;
-
-    for(auto &item : this->stateJson["buttons"].items())
-    {
-        name = item.value()["functionPointer"];
-        text = item.key();
-
-        this->buttonKeys.push_back(text);
-
-        percentage = (float)this->stateJson["viewports"]["menu"]["relativeSize"] / 100.0f;
-        int width = screenWidth * percentage;
-        int height = screenHeight * percentage;
-
-        percentage = (float)item.value()["relativeSize"] / 100.0f;
-        distance = width * (1.0f - percentage);
-        width = width * (1.0f - percentage);
-        height = height * (1.0f - percentage);
-
-        int y1 = distance + height * this->gameObjects.size();
-        int y2 = y1 + height;
-
-        int x1 = distance;
-        int x2 = x1 + width;
-
-        this->gameObjects.push_back(new MenuButton( x1, x2, y1, y2, text,
-                                                    item.value()["angle"], item.value()["red"],
-                                                    item.value()["green"], item.value()["blue"],
-                                                    item.value()["alpha"], this->functionMap[name]));
-    }
+    float percentageX = 0.0f;
+    float percentageY = 0.0f;
 
     for(auto &item : this->stateJson["viewports"].items())
     {
@@ -226,12 +198,42 @@ bool GameOverState::onEnter()
 
         this->viewportKeys.push_back(text);
 
-        percentage = (float)(item.value()["relativeSize"]) / 100.0f;
-        viewportWidth = screenWidth * percentage;
+        percentageX = (float)(item.value()["relativeSize"]) / 100.0f;
+        viewportWidth = screenWidth * percentageX;
         viewportHeight = screenHeight;
 
         TextureManager::Instance()->addViewport(item.value()["xPos"], item.value()["yPos"],
                                                     viewportWidth, viewportHeight, text);
+    }
+
+    for(auto &item : this->stateJson["buttons"].items())
+    {
+        name = item.value()["viewport"];
+
+        SDL_Rect viewport = TextureManager::Instance()->getViewport(name);
+
+        percentageX = (float)item.value()["relativeSizeX"] / 100.0f;
+        percentageY = (float)item.value()["relativeSizeY"] / 100.0f;
+
+        int distX = viewport.w * percentageX;
+        int distY = viewport.h * percentageY;
+
+        int width = viewport.w - 2 * distX;
+        int height = viewport.h * percentageX;
+
+        int y1 = distY * (this->gameObjects.size() + 1) + height * this->gameObjects.size();
+        int y2 = y1 + height;
+
+        int x1 = distX;
+        int x2 = x1 + width;
+
+        name = item.value()["functionPointer"];
+        text = item.key();
+
+        this->gameObjects.push_back(new MenuButton( x1, x2, y1, y2, text,
+                                                    item.value()["angle"], item.value()["red"],
+                                                    item.value()["green"], item.value()["blue"],
+                                                    item.value()["alpha"], this->functionMap[name]));
     }
 
     return true;

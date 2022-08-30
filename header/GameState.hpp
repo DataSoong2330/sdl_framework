@@ -47,7 +47,7 @@ class GameState
         SDL_Rect screenSize;
 
         // the state will be parsed into this json object
-        nlohmann::json stateJson;
+        nlohmann::ordered_json stateJson;
 
         // maps the function callbacks by a key
         std::map<std::string, std::function<void()>> functionMap;

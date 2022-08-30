@@ -36,6 +36,9 @@ class TextureManager
         void addViewport(int x, int y, int w, int h, std::string keyOfViewport);
         void addViewport(SDL_Rect &viewport, std::string keyOfViewport);
 
+        // gets a viewport from the map
+        SDL_Rect& getViewport(std::string viewportID);
+
         // changes the color of a texture
         void setColorOfTexture(std::string textureID, std::string colorID);
         // sets the blending mode to NONE, ALPHA, ADD or MOD
