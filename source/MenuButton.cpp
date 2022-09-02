@@ -2,18 +2,28 @@
 #include "../header/MenuButton.hpp"
 #include "../header/TextureManager.hpp"
 
-MenuButton::MenuButton() : GameObject(), stateFunc(0), x1(0), x2(0), y1(0), y2(0), textureID(""), released(true)
+MenuButton::MenuButton() : GameObject(), stateFunc(nullptr), x1(0), x2(0), y1(0), y2(0), textureID(""), released(true)
 {
-
 }
 
-MenuButton::MenuButton( int x1, int x2, int y1, int y2, std::string texture,
-            double angle, unsigned r, unsigned g, unsigned b, unsigned a,
-            std::function<void()> stateFunc) : GameObject(Vector2D(0, 0), width, height,
-            angle, r, g, b, a), stateFunc(stateFunc), x1(x1), x2(x2), y1(y1), y2(y2),
-            textureID(texture), released(true)
+MenuButton::MenuButton(Button values) : GameObject(Vector2D(0,0), 0, 0, values.angle, values.r, values.g, values.b,
+                                        values.a), stateFunc(values.func), x1(values.x1), x2(values.x2), y1(values.y1),
+                                        y2(values.y2), x(values.x), y(values.y), textureID(values.textureID),
+                                        viewportID(values.viewportID), fontID(values.fontID),
+                                        sdlFlip(values.sdlFlip), released(true)
 {
-    TextureManager::Instance()->setBlendModeOfTexture(this->textureID, SDL_BLENDMODE_BLEND);
+    this->destRect.x = values.destRect.x;
+    this->destRect.y = values.destRect.y;
+    this->destRect.w = values.destRect.w;
+    this->destRect.h = values.destRect.h;
+
+    this->srcRect.x = values.srcRect.x;
+    this->srcRect.y = values.srcRect.y;
+    this->srcRect.w = values.srcRect.w;
+    this->srcRect.h = values.srcRect.h;
+
+    this->center.x = values.center.x;
+    this->center.y = values.center.y;
 
     int textureWidth = TextureManager::Instance()->getWidthOfTexture(this->textureID);
     int textureHeight = TextureManager::Instance()->getHeightOfTexture(this->textureID);
@@ -32,15 +42,13 @@ MenuButton::MenuButton( int x1, int x2, int y1, int y2, std::string texture,
 
 MenuButton::~MenuButton()
 {
-
 }
 
 void MenuButton::draw()
 {
-    TextureManager::Instance()->drawBox("menu", this->x1, this->x2, this->y1, this->y2,
-                                        this->r, this->g, this->b, this->a);
+    TextureManager::Instance()->drawBox(this->viewportID, this->x1, this->x2, this->y1, this->y2, this->r, this->g, this->b, this->a);
 
-    TextureManager::Instance()->drawTexture(this->textureID, this->x, this->y, NULL, "menu");
+    TextureManager::Instance()->drawTexture(this->textureID, this->x, this->y, nullptr, this->viewportID, this->angle, nullptr, static_cast<SDL_RendererFlip>(this->sdlFlip));
 }
 
 void MenuButton::update()

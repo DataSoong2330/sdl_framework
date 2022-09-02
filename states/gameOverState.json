@@ -2,28 +2,56 @@
     "assets": {
         "gameOverBackground": {
             "path": "assets/crystal_heads_1024_768.jpg",
-            "coordinates": {
+            "destRect": {
+                "width": 0,
+                "height": 0,
                 "xPos": 0,
                 "yPos": 0
             },
+            "srcRect": {
+                "width": 0,
+                "height": 0,
+                "xPos": 0,
+                "yPos": 0
+            },
+            "angle": 0.0,
+            "centerPoint": {
+                "xPos": 0,
+                "yPos": 0
+            },
+            "flip": 0,
             "viewport": "screen"
         },
         "none": {
             "path": "nullptr",
-            "coordinates": {
+            "destRect": {
+                "width": 0,
+                "height": 0,
                 "xPos": 0,
                 "yPos": 0
             },
+            "srcRect": {
+                "width": 0,
+                "height": 0,
+                "xPos": 0,
+                "yPos": 0
+            },
+            "angle": 0.0,
+            "centerPoint": {
+                "xPos": 0,
+                "yPos": 0
+            },
+            "flip": 0,
             "viewport": "menu"
         }
     },
     "buttons": {
         "Neu": {
-            "width": 150,
-            "height": 50,
+            "width": 0,
+            "height": 0,
             "xpos": 0,
-            "ypos": 125,
-            "angle": 0,
+            "ypos": 0,
+            "angle": 0.0,
             "red": 0,
             "green": 85,
             "blue": 170,
@@ -31,14 +59,17 @@
             "functionPointer": "restartPlay",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
-            "viewport": "menu"
+            "viewport": "menu",
+            "ttf": "oxyReg30",
+            "color": "white",
+            "flip": 0
         },
         "Menü": {
-            "width": 150,
-            "height": 50,
+            "width": 0,
+            "height": 0,
             "xpos": 0,
-            "ypos": 200,
-            "angle": 0,
+            "ypos": 0,
+            "angle": 0.0,
             "red": 0,
             "green": 85,
             "blue": 170,
@@ -46,7 +77,10 @@
             "functionPointer": "gameOverToMain",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
-            "viewport": "menu"
+            "viewport": "menu",
+            "ttf": "oxyReg30",
+            "color": "white",
+            "flip": 0
         }
     },
     "color": {
@@ -70,18 +104,6 @@
             "text": "He's dead, Jim!",
             "color": "white",
             "viewport": "screen"
-        },
-        "Neu": {
-            "ttf": "oxyReg30",
-            "text": "Neu",
-            "color": "white",
-            "viewport": "menu"
-        },
-        "Menü": {
-            "ttf": "oxyReg30",
-            "text": "Menü",
-            "color": "white",
-            "viewport": "menu"
         }
     },
     "ttf": {
@@ -94,18 +116,22 @@
         "menu": {
             "xPos": 0,
             "yPos": 0,
-            "width": 170,
+            "width": 0,
             "height": 0,
             "texture": "none",
-            "relativeSize": 20
+            "relativeSizeX": 0.2,
+            "relativeSizeY": 1.00,
+            "alignment": "left"
         },
         "screen": {
-            "xPos": 170,
+            "xPos": 0,
             "yPos": 0,
-            "width": 470,
+            "width": 0,
             "height": 0,
             "texture": "gameOverBackground",
-            "relativeSize": 80
+            "relativeSizeX": 0.8,
+            "relativeSizeY": 1.00,
+            "alignment": "right"
         }
     }
 }

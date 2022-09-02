@@ -151,7 +151,7 @@ void Texture::setAlpha(Uint8 alpha)
 // renders the texture to the screen
 void Texture::render(int x, int y, SDL_Rect* clip, SDL_Rect viewport, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
-    SDL_Rect renderQuad;
+    SDL_Rect renderQuad = { 0 };
     // sets the quad where the texture is rendered to
     if(this->width > viewport.w && this->height > viewport.h)
         renderQuad = { x, y, viewport.w, viewport.h };

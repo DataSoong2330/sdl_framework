@@ -70,11 +70,28 @@ bool PlayState::onEnter()
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Dead", "white", "Dead", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Return", "white", "Return", TextQuality::BLENDED);
 
-    this->gameObjects.push_back(new MenuButton(25, 175, 25, 75, "Pause", 0.0, 0, 85, 170, 255, playToPause));
+    Button values;
+    values.x1 = 10, values.x2 = 160;
+    values.y1 = 10, values.y2 = 60;
+    values.textureID = "Pause", values.colorID = "white", values.fontID = "oxyReg30";
+    values.angle = 0.0d;
+    values.r = 0, values.g = 85, values.b = 170, values.a = 255;
+    values.viewportID = "menu";
+    values.func = playToPause;
 
-    this->gameObjects.push_back(new MenuButton(25, 175, 100, 150, "Return", 0.0, 0, 85, 170, 255, returnToMenu));
+    this->gameObjects.push_back(new MenuButton(values));
 
-    this->gameObjects.push_back(new MenuButton(25, 175, 175, 225, "Dead", 0.0, 0, 85, 170, 255, playToGameOver));
+    values.y1 = 70, values.y2 = 120;
+    values.textureID = "Return";
+    values.func = returnToMenu;
+
+    this->gameObjects.push_back(new MenuButton(values));
+
+    values.y1 = 130, values.y2 = 180;
+    values.textureID = "Dead";
+    values.func = playToGameOver;
+
+    this->gameObjects.push_back(new MenuButton(values));
 
     return true;
 }

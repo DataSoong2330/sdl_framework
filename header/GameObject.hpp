@@ -1,8 +1,10 @@
 #ifndef __GAMEOBJECT__
 #define __GAMEOBJECT__
 
+#include <SDL2/SDL.h>
 #include <string>
 
+#include "../header/CommonEnums.hpp"
 #include "../header/Vector2D.hpp"
 
 class GameObject

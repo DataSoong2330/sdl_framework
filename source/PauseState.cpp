@@ -60,11 +60,22 @@ bool PauseState::onEnter()
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Resume", "white", "Resume", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Menu", "white", "Back", TextQuality::BLENDED);
 
-    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
-                                               125, 175, "Resume", 0, 0, 85, 170, 255, resumePlay));
+    Button values;
+    values.x1 = 10, values.x2 = 160;
+    values.y1 = 10, values.y2 = 60;
+    values.textureID = "Resume", values.colorID = "white", values.fontID = "oxyReg30";
+    values.angle = 0.0d;
+    values.r = 0, values.g = 85, values.b = 170, values.a = 255;
+    values.viewportID = "menu";
+    values.func = resumePlay;
 
-    this->gameObjects.push_back(new MenuButton(this->screenSize.w / 2 - 75, this->screenSize.w / 2 + 75,
-                                               200, 250, "Back", 0, 0, 85, 170, 255, pauseToMain));
+    this->gameObjects.push_back(new MenuButton(values));
+
+    values.y1 = 70, values.y2 = 120;
+    values.textureID = "Back";
+    values.func = pauseToMain;
+
+    this->gameObjects.push_back(new MenuButton(values));
 
     return true;
 }

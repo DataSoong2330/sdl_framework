@@ -5,7 +5,6 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "../header/Texture.hpp"
-#include "../header/Viewport.hpp"
 
 class TextureManager
 {
@@ -52,8 +51,8 @@ class TextureManager
         inline const int getWidthOfTexture(std::string textureID) { return this->textures[textureID]->getWidth(); }
 
         // draws a texture to the screen
-        void drawTexture(std::string textureID, int x, int y, SDL_Rect* clip = NULL, std::string viewportID = "screen",
-                        double angle = 0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+        void drawTexture(std::string textureID, int x, int y, SDL_Rect* clip = nullptr, std::string viewportID = "screen",
+                        double angle = 0, SDL_Point* center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
         // draws a box to the screen
         void drawBox(std::string viewportID, int x1, int x2, int y1, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
         // draws a circle to the screen

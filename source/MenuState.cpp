@@ -69,7 +69,7 @@ void MenuState::render()
     if(this->gameObjects.size() > 0)
     {
         for(unsigned i = 0; i < this->gameObjects.size(); i++)
-        this->gameObjects[i]->draw();
+            this->gameObjects[i]->draw();
     }
 }
 
@@ -101,8 +101,20 @@ bool MenuState::onEnter()
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Play", "white", "Play", TextQuality::BLENDED);
     TextureManager::Instance()->loadTextTexture("oxyReg30", "Exit", "white", "Exit", TextQuality::BLENDED);
 
-    this->gameObjects.push_back(new MenuButton(10, 160, 10, 60, "Play", 0.0, 0, 85, 170, 255, menuToPlay));
-    this->gameObjects.push_back(new MenuButton(10, 160, 70, 120, "Exit", 0.0, 0, 85, 170, 255, exitFromMenu));
+    Button values;
+    values.x1 = 10, values.x2 = 160;
+    values.y1 = 10, values.y2 = 60;
+    values.textureID = "Play", values.colorID = "white", values.fontID = "oxyReg30";
+    values.angle = 0.0d;
+    values.r = 0, values.g = 85, values.b = 170, values.a = 255;
+    values.func = menuToPlay;
+    values.viewportID = "menu";
+    this->gameObjects.push_back(new MenuButton(values));
+
+    values.y1 = 70, values.y2 = 120;
+    values.textureID = "Exit";
+    values.func = exitFromMenu;
+    this->gameObjects.push_back(new MenuButton(values));
 
     return true;
 }

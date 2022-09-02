@@ -60,10 +60,18 @@ void GameOverState::update()
 void GameOverState::render()
 {
     // draws the textures with their id and a coordinate
-    TextureManager::Instance()->drawTexture("gameOverBackground",
+    /*TextureManager::Instance()->drawTexture("gameOverBackground",
                                             this->stateJson["assets"]["gameOverBackground"]["coordinates"]["xPos"],
                                             this->stateJson["assets"]["gameOverBackground"]["coordinates"]["yPos"],
-                                            NULL, "screen");
+                                            NULL, "screen");*/
+
+    for(auto &item : this->assets)
+    {
+        TextureManager::Instance()->drawTexture(item.textureID, item.destRect.x, item.destRect.y, nullptr,
+                                                item.viewportID, item.angle, &item.center,
+                                                static_cast<SDL_RendererFlip>(item.sdlFlip));
+    }
+
     TextureManager::Instance()->drawTexture("Over", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50,
                                             NULL, "screen");
 
@@ -153,19 +161,6 @@ bool GameOverState::onEnter()
         TextureManager::Instance()->loadFont(name, item.value()["size"], text);
     }
 
-    for(auto &item : this->stateJson["assets"].items())
-    {
-        // get the path
-        name = item.value()["path"];
-        // get the id
-        text = item.key();
-
-        this->assetKeys.push_back(text);
-
-        // load the image with path and id
-        TextureManager::Instance()->loadImageTexture(name, text);
-    }
-
     for(auto &item : this->stateJson["texttexture"].items())
     {
         // get the name
@@ -190,27 +185,59 @@ bool GameOverState::onEnter()
 
     for(auto &item : this->stateJson["viewports"].items())
     {
-        int viewportWidth = 0;
-        int viewportHeight = 0;
+        Viewport tempViewport;
 
-        text = item.key();
-        name = item.value()["texture"];
+        tempViewport.viewportID = item.key();
+        tempViewport.textureID = item.value()["texture"];
+        tempViewport.alignment = item.value()["alignment"];
 
-        this->viewportKeys.push_back(text);
+        tempViewport.percentageX = item.value()["relativeSizeX"];
+        tempViewport.percentageY = item.value()["relativeSizeY"];
+        tempViewport.viewport.w = screenWidth * tempViewport.percentageX;
+        tempViewport.viewport.h = screenHeight * tempViewport.percentageY;
 
-        percentageX = (float)(item.value()["relativeSize"]) / 100.0f;
-        viewportWidth = screenWidth * percentageX;
-        viewportHeight = screenHeight;
+        if(tempViewport.alignment == "left")
+        {
+            tempViewport.viewport.x = 0;
+            tempViewport.viewport.y = 0;
+        }
+        else
+        {
+            tempViewport.viewport.x = screenWidth - screenWidth * tempViewport.percentageX;
+            tempViewport.viewport.y = 0;
+        }
 
-        TextureManager::Instance()->addViewport(item.value()["xPos"], item.value()["yPos"],
-                                                    viewportWidth, viewportHeight, text);
+        TextureManager::Instance()->addViewport(tempViewport.viewport.x, tempViewport.viewport.y,
+                                                tempViewport.viewport.w, tempViewport.viewport.h,
+                                                tempViewport.viewportID);
+
+        this->viewports.push_back(tempViewport);
     }
 
     for(auto &item : this->stateJson["buttons"].items())
     {
-        name = item.value()["viewport"];
+        Button values;
 
-        SDL_Rect viewport = TextureManager::Instance()->getViewport(name);
+        values.textureID = item.key();
+        values.viewportID = item.value()["viewport"];
+        values.fontID = item.value()["ttf"];
+        values.colorID = item.value()["color"];
+        values.angle = item.value()["angle"];
+        values.r = item.value()["red"];
+        values.g = item.value()["green"];
+        values.b = item.value()["blue"];
+        values.a = item.value()["alpha"];
+        values.func = this->functionMap[item.value()["functionPointer"]];
+        values.sdlFlip = static_cast<FLIP>(item.value()["flip"]);
+
+        TextureManager::Instance()->loadTextTexture(values.fontID, values.textureID, values.colorID,
+                                                    values.textureID, TextQuality::BLENDED);
+
+        TextureManager::Instance()->setBlendModeOfTexture(values.textureID, SDL_BLENDMODE_BLEND);
+
+        this->texttextureKeys.push_back(values.textureID);
+
+        SDL_Rect viewport = TextureManager::Instance()->getViewport(values.viewportID);
 
         percentageX = (float)item.value()["relativeSizeX"] / 100.0f;
         percentageY = (float)item.value()["relativeSizeY"] / 100.0f;
@@ -221,19 +248,54 @@ bool GameOverState::onEnter()
         int width = viewport.w - 2 * distX;
         int height = viewport.h * percentageX;
 
-        int y1 = distY * (this->gameObjects.size() + 1) + height * this->gameObjects.size();
-        int y2 = y1 + height;
+        values.y1 = distY * (this->gameObjects.size() + 1) + height * this->gameObjects.size();
+        values.y2 = values.y1 + height;
 
-        int x1 = distX;
-        int x2 = x1 + width;
+        values.x1 = distX;
+        values.x2 = values.x1 + width;
 
-        name = item.value()["functionPointer"];
-        text = item.key();
+        this->gameObjects.push_back(new MenuButton(values));
+    }
 
-        this->gameObjects.push_back(new MenuButton( x1, x2, y1, y2, text,
-                                                    item.value()["angle"], item.value()["red"],
-                                                    item.value()["green"], item.value()["blue"],
-                                                    item.value()["alpha"], this->functionMap[name]));
+    for(auto &item : this->stateJson["assets"].items())
+    {
+        // current asset
+        Asset curAsset;
+
+        // get the path
+        curAsset.fileName = item.value()["path"];
+        // get the id
+        curAsset.textureID = item.key();
+        // get the viewportID
+        curAsset.viewportID = item.value()["viewport"];
+
+        SDL_Rect viewport = TextureManager::Instance()->getViewport(curAsset.viewportID);
+
+        // get the dest rect
+        curAsset.destRect.w = viewport.w;
+        curAsset.destRect.h = viewport.h;
+        curAsset.destRect.x = 0;
+        curAsset.destRect.y = 0;
+
+        // get the source rect
+        curAsset.srcRect.w = item.value()["srcRect"]["width"];
+        curAsset.srcRect.h = item.value()["srcRect"]["height"];
+        curAsset.srcRect.x = item.value()["srcRect"]["xPos"];
+        curAsset.srcRect.y = item.value()["srcRect"]["yPos"];
+
+        // get the angle of the asset
+        curAsset.angle = item.value()["angle"];
+
+        // get the center of the asset
+        curAsset.center.x = item.value()["centerPoint"]["xPos"];
+        curAsset.center.y = item.value()["centerPoint"]["yPos"];
+
+        curAsset.sdlFlip = static_cast<FLIP>(item.value()["flip"]);
+
+        // load the image with path and id
+        TextureManager::Instance()->loadImageTexture(curAsset.fileName, curAsset.textureID);
+
+        this->assets.push_back(curAsset);
     }
 
     return true;
@@ -258,9 +320,9 @@ bool GameOverState::onExit()
         TextureManager::Instance()->removeFont(item);
     }
 
-    for(auto &item : this->assetKeys)
+    for(auto &item : this->assets)
     {
-        TextureManager::Instance()->removeTexture(item);
+        TextureManager::Instance()->removeTexture(item.textureID);
     }
 
     for(auto &item : this->texttextureKeys)
@@ -268,9 +330,9 @@ bool GameOverState::onExit()
         TextureManager::Instance()->removeTexture(item);
     }
 
-    for(auto &item : this->viewportKeys)
+    for(auto &item : this->viewports)
     {
-        TextureManager::Instance()->removeViewport(item);
+        TextureManager::Instance()->removeViewport(item.viewportID);
     }
 
     for(auto &item : this->gameObjects)
