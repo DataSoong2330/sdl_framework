@@ -3,6 +3,7 @@
 
 #include <functional>
 
+#include "../header/CommonEnums.hpp"
 #include "../header/GameObject.hpp"
 
 struct Button
@@ -16,6 +17,7 @@ struct Button
     SDL_Rect srcRect = {0};
     SDL_Point center = {0};
     FLIP sdlFlip = FLIP::NONE;
+    TEXTQUALITY textQuality = TEXTQUALITY::SOLID;
 };
 
 class MenuButton : public GameObject

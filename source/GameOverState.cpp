@@ -49,7 +49,7 @@ void GameOverState::update()
             SoundManager::Instance()->haltMusic();
     }
 
-    // draws all the game objects
+    // updates all the game objects
     if(this->gameObjects.size() > 0)
     {
         for(unsigned i = 0; i < this->gameObjects.size(); i++)
@@ -60,11 +60,6 @@ void GameOverState::update()
 void GameOverState::render()
 {
     // draws the textures with their id and a coordinate
-    /*TextureManager::Instance()->drawTexture("gameOverBackground",
-                                            this->stateJson["assets"]["gameOverBackground"]["coordinates"]["xPos"],
-                                            this->stateJson["assets"]["gameOverBackground"]["coordinates"]["yPos"],
-                                            NULL, "screen");*/
-
     for(auto &item : this->assets)
     {
         TextureManager::Instance()->drawTexture(item.textureID, item.destRect.x, item.destRect.y, nullptr,
@@ -72,8 +67,12 @@ void GameOverState::render()
                                                 static_cast<SDL_RendererFlip>(item.sdlFlip));
     }
 
-    TextureManager::Instance()->drawTexture("Over", (this->screenSize.w - TextureManager::Instance()->getWidthOfTexture("Over")) / 2, 50,
-                                            NULL, "screen");
+    for(auto &item : this->textAssets)
+    {
+        TextureManager::Instance()->drawTexture(item.textureID, item.destRect.x, item.destRect.y, nullptr,
+                                                item.viewportID, item.angle, nullptr,
+                                                static_cast<SDL_RendererFlip>(item.sdlFlip));
+    }
 
     // draws all the game objects
     if(this->gameObjects.size() > 0)
@@ -161,22 +160,6 @@ bool GameOverState::onEnter()
         TextureManager::Instance()->loadFont(name, item.value()["size"], text);
     }
 
-    for(auto &item : this->stateJson["texttexture"].items())
-    {
-        // get the name
-        name = item.key();
-        // get the text
-        text = item.value()["text"];
-        // get the color
-        color = item.value()["color"];
-        // get the ttf
-        ttf = item.value()["ttf"];
-
-        this->texttextureKeys.push_back(name);
-
-        TextureManager::Instance()->loadTextTexture(ttf, text, color, name, TextQuality::BLENDED);
-    }
-
     int screenWidth = 0;
     int screenHeight = 0;
     SDL_GetWindowSize(Game::Instance()->getWindow(), &screenWidth, &screenHeight);
@@ -214,11 +197,44 @@ bool GameOverState::onEnter()
         this->viewports.push_back(tempViewport);
     }
 
+    for(auto &item : this->stateJson["texttexture"].items())
+    {
+        TextAsset textAsset;
+
+        // get the name
+        textAsset.textureID = item.key();
+        // get the text
+        textAsset.text = item.value()["text"];
+        // get the color
+        textAsset.colorID = item.value()["colorID"];
+        // get the fontID
+        textAsset.fontName = item.value()["fontID"];
+        // get the texture quality
+        textAsset.textQuality = static_cast<TEXTQUALITY>(item.value()["quality"]);
+        // get the viewport
+        textAsset.viewportID = item.value()["viewport"];
+
+        SDL_Rect viewport = TextureManager::Instance()->getViewport(textAsset.viewportID);
+
+        TextureManager::Instance()->loadTextTexture(textAsset.fontName, textAsset.text, textAsset.colorID,
+                                                    textAsset.textureID,
+                                                    static_cast<TextQuality>(textAsset.textQuality));
+
+        textAsset.destRect.w = TextureManager::Instance()->getWidthOfTexture(textAsset.textureID);
+        textAsset.destRect.h = TextureManager::Instance()->getHeightOfTexture(textAsset.textureID);
+
+        textAsset.destRect.x = (viewport.w - textAsset.destRect.w) / 2;
+        textAsset.destRect.y = (viewport.h - textAsset.destRect.h) / 2;
+
+        this->textAssets.push_back(textAsset);
+    }
+
     for(auto &item : this->stateJson["buttons"].items())
     {
         Button values;
+        TextAsset textAsset;
 
-        values.textureID = item.key();
+        values.textureID = textAsset.textureID = item.key();
         values.viewportID = item.value()["viewport"];
         values.fontID = item.value()["ttf"];
         values.colorID = item.value()["color"];
@@ -229,13 +245,15 @@ bool GameOverState::onEnter()
         values.a = item.value()["alpha"];
         values.func = this->functionMap[item.value()["functionPointer"]];
         values.sdlFlip = static_cast<FLIP>(item.value()["flip"]);
+        values.textQuality = static_cast<TEXTQUALITY>(item.value()["quality"]);
 
         TextureManager::Instance()->loadTextTexture(values.fontID, values.textureID, values.colorID,
-                                                    values.textureID, TextQuality::BLENDED);
+                                                    values.textureID,
+                                                    static_cast<TextQuality>(values.textQuality));
 
         TextureManager::Instance()->setBlendModeOfTexture(values.textureID, SDL_BLENDMODE_BLEND);
 
-        this->texttextureKeys.push_back(values.textureID);
+        this->textAssets.push_back(textAsset);
 
         SDL_Rect viewport = TextureManager::Instance()->getViewport(values.viewportID);
 
@@ -260,42 +278,42 @@ bool GameOverState::onEnter()
     for(auto &item : this->stateJson["assets"].items())
     {
         // current asset
-        Asset curAsset;
+        ImageAsset imageAsset;
 
         // get the path
-        curAsset.fileName = item.value()["path"];
+        imageAsset.fileName = item.value()["path"];
         // get the id
-        curAsset.textureID = item.key();
+        imageAsset.textureID = item.key();
         // get the viewportID
-        curAsset.viewportID = item.value()["viewport"];
+        imageAsset.viewportID = item.value()["viewport"];
 
-        SDL_Rect viewport = TextureManager::Instance()->getViewport(curAsset.viewportID);
+        SDL_Rect viewport = TextureManager::Instance()->getViewport(imageAsset.viewportID);
 
         // get the dest rect
-        curAsset.destRect.w = viewport.w;
-        curAsset.destRect.h = viewport.h;
-        curAsset.destRect.x = 0;
-        curAsset.destRect.y = 0;
+        imageAsset.destRect.w = viewport.w;
+        imageAsset.destRect.h = viewport.h;
+        imageAsset.destRect.x = 0;
+        imageAsset.destRect.y = 0;
 
         // get the source rect
-        curAsset.srcRect.w = item.value()["srcRect"]["width"];
-        curAsset.srcRect.h = item.value()["srcRect"]["height"];
-        curAsset.srcRect.x = item.value()["srcRect"]["xPos"];
-        curAsset.srcRect.y = item.value()["srcRect"]["yPos"];
+        imageAsset.srcRect.w = item.value()["srcRect"]["width"];
+        imageAsset.srcRect.h = item.value()["srcRect"]["height"];
+        imageAsset.srcRect.x = item.value()["srcRect"]["xPos"];
+        imageAsset.srcRect.y = item.value()["srcRect"]["yPos"];
 
         // get the angle of the asset
-        curAsset.angle = item.value()["angle"];
+        imageAsset.angle = item.value()["angle"];
 
         // get the center of the asset
-        curAsset.center.x = item.value()["centerPoint"]["xPos"];
-        curAsset.center.y = item.value()["centerPoint"]["yPos"];
+        imageAsset.center.x = item.value()["centerPoint"]["xPos"];
+        imageAsset.center.y = item.value()["centerPoint"]["yPos"];
 
-        curAsset.sdlFlip = static_cast<FLIP>(item.value()["flip"]);
+        imageAsset.sdlFlip = static_cast<FLIP>(item.value()["flip"]);
 
         // load the image with path and id
-        TextureManager::Instance()->loadImageTexture(curAsset.fileName, curAsset.textureID);
+        TextureManager::Instance()->loadImageTexture(imageAsset.fileName, imageAsset.textureID);
 
-        this->assets.push_back(curAsset);
+        this->assets.push_back(imageAsset);
     }
 
     return true;
@@ -325,9 +343,9 @@ bool GameOverState::onExit()
         TextureManager::Instance()->removeTexture(item.textureID);
     }
 
-    for(auto &item : this->texttextureKeys)
+    for(auto &item : this->textAssets)
     {
-        TextureManager::Instance()->removeTexture(item);
+        TextureManager::Instance()->removeTexture(item.textureID);
     }
 
     for(auto &item : this->viewports)

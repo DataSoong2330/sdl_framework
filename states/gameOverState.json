@@ -62,7 +62,8 @@
             "viewport": "menu",
             "ttf": "oxyReg30",
             "color": "white",
-            "flip": 0
+            "flip": 0,
+            "quality": 2
         },
         "Menü": {
             "width": 0,
@@ -80,7 +81,8 @@
             "viewport": "menu",
             "ttf": "oxyReg30",
             "color": "white",
-            "flip": 0
+            "flip": 0,
+            "quality": 2
         }
     },
     "color": {
@@ -100,10 +102,11 @@
     },
     "texttexture": {
         "Over": {
-            "ttf": "oxyReg30",
+            "fontID": "oxyReg30",
             "text": "He's dead, Jim!",
-            "color": "white",
-            "viewport": "screen"
+            "colorID": "white",
+            "viewport": "screen",
+            "quality": 2
         }
     },
     "ttf": {

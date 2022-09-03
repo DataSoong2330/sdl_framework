@@ -35,12 +35,12 @@ class GameState
         //ButtonCoordinate coordinate;
 
         // a string vector for all resources which were added on entering the state
-        std::vector<Asset> assets;
+        std::vector<ImageAsset> assets;
         std::vector<std::string> buttonKeys;
         std::vector<std::string> colorKeys;
         std::vector<std::string> musicKeys;
         std::vector<std::string> soundKeys;
-        std::vector<std::string> texttextureKeys;
+        std::vector<TextAsset> textAssets;
         std::vector<std::string> ttfKeys;
         std::vector<Viewport> viewports;
 
