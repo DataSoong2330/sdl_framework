@@ -1,12 +1,12 @@
 #include "../header/GameStateMachine.hpp"
 
 // pushes a state in the game state machine
-void GameStateMachine::pushState(GameState* state)
+void GameStateMachine::pushState(GameState* state, std::string fileName)
 {
     // push it on the backe
     this->gameStates.push_back(state);
     // enter the state
-    this->gameStates.back()->onEnter();
+    this->gameStates.back()->onEnter(fileName);
 }
 
 void GameStateMachine::popState()
@@ -22,7 +22,7 @@ void GameStateMachine::popState()
 }
 
 // change the state in another
-void GameStateMachine::changeState(GameState* state)
+void GameStateMachine::changeState(GameState* state, std::string fileName)
 {
     // if there is a state already
     if(!this->gameStates.empty())
@@ -37,7 +37,7 @@ void GameStateMachine::changeState(GameState* state)
     }
 
     // enter the new state
-    state->onEnter();
+    state->onEnter(fileName);
 
     // push the state into the vector
     this->gameStates.push_back(state);

@@ -1,7 +1,7 @@
 {
     "assets": {
-        "gameOverBackground": {
-            "path": "assets/crystal_heads_1024_768.jpg",
+        "playBackground": {
+            "path": "assets/milkyway_1024_768.jpg",
             "destRect": {
                 "width": 0,
                 "height": 0,
@@ -46,7 +46,7 @@
         }
     },
     "buttons": {
-        "Neu": {
+        "Pause": {
             "width": 0,
             "height": 0,
             "xpos": 0,
@@ -56,7 +56,7 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "restartPlay",
+            "functionPointer": "playToPause",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
             "viewport": "menu",
@@ -65,7 +65,7 @@
             "flip": 0,
             "quality": 2
         },
-        "Menü": {
+        "Return": {
             "width": 0,
             "height": 0,
             "xpos": 0,
@@ -75,7 +75,26 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "gameOverToMain",
+            "functionPointer": "returnToMenu",
+            "relativeSizeX": 10,
+            "relativeSizeY": 2,
+            "viewport": "menu",
+            "ttf": "oxyReg30",
+            "color": "white",
+            "flip": 0,
+            "quality": 2
+        },
+        "Dead": {
+            "width": 0,
+            "height": 0,
+            "xpos": 0,
+            "ypos": 0,
+            "angle": 0.0,
+            "red": 0,
+            "green": 85,
+            "blue": 170,
+            "alpha": 255,
+            "functionPointer": "playToGameOver",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
             "viewport": "menu",
@@ -101,9 +120,9 @@
     "sound": {
     },
     "texttexture": {
-        "Over": {
+        "Playing": {
             "fontID": "oxyReg30",
-            "text": "He's dead, Jim!",
+            "text": "Was haben Sie mit meine Vogel vor?",
             "colorID": "white",
             "viewport": "screen",
             "quality": 2

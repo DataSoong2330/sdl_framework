@@ -12,7 +12,7 @@ class PauseState : public GameState
         void render();
 
         // loads all images, sounds and stuff
-        bool onEnter();
+        bool onEnter(std::string fileName);
         // frees the memory allocated on entering a state
         bool onExit();
 

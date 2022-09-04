@@ -135,6 +135,9 @@ void SoundManager::removeSFX(std::string sfxID)
 // remove a music from the map
 void SoundManager::removeMusic(std::string musicID)
 {
+    if(Mix_PlayingMusic() == 1 || Mix_PausedMusic() == 1)
+        Mix_HaltMusic();
+
     Mix_FreeMusic(this->musics[musicID]);
     this->musics.erase(musicID);
 }

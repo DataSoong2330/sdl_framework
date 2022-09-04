@@ -1,7 +1,7 @@
 {
     "assets": {
-        "gameOverBackground": {
-            "path": "assets/crystal_heads_1024_768.jpg",
+        "pauseBackground": {
+            "path": "assets/strand_1024_768.jpg",
             "destRect": {
                 "width": 0,
                 "height": 0,
@@ -46,7 +46,7 @@
         }
     },
     "buttons": {
-        "Neu": {
+        "Resume": {
             "width": 0,
             "height": 0,
             "xpos": 0,
@@ -56,7 +56,7 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "restartPlay",
+            "functionPointer": "resumePlay",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
             "viewport": "menu",
@@ -65,7 +65,7 @@
             "flip": 0,
             "quality": 2
         },
-        "Menü": {
+        "Menu": {
             "width": 0,
             "height": 0,
             "xpos": 0,
@@ -75,7 +75,7 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "gameOverToMain",
+            "functionPointer": "pauseToMain",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
             "viewport": "menu",
@@ -101,9 +101,9 @@
     "sound": {
     },
     "texttexture": {
-        "Over": {
+        "PauseState": {
             "fontID": "oxyReg30",
-            "text": "He's dead, Jim!",
+            "text": "Your lack of faith is disturbing",
             "colorID": "white",
             "viewport": "screen",
             "quality": 2
@@ -131,7 +131,7 @@
             "yPos": 0,
             "width": 0,
             "height": 0,
-            "texture": "gameOverBackground",
+            "texture": "pauseBackground",
             "relativeSizeX": 0.8,
             "relativeSizeY": 1.00,
             "alignment": "right"

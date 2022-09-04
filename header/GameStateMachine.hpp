@@ -7,9 +7,9 @@ class GameStateMachine
 {
     public:
         // insert a state to the vector
-        void pushState(GameState* state);
+        void pushState(GameState* state, std::string fileName);
         // change the state
-        void changeState(GameState* state);
+        void changeState(GameState* state, std::string fileName);
         // deletes the last state
         void popState();
 

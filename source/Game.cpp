@@ -119,7 +119,7 @@ bool Game::init()
                     if(SoundManager::Instance()->init(sfxFlags, 44100, AUDIO_S16, 2, 4096))
                     {
                         this->gameStateMachine = new GameStateMachine();
-                        this->gameStateMachine->pushState(new MenuState());
+                        this->gameStateMachine->pushState(new MenuState(), "states/menuState.json");
 
                         success = true;
                         this->running = true;

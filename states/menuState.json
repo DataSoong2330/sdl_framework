@@ -1,7 +1,7 @@
 {
     "assets": {
-        "gameOverBackground": {
-            "path": "assets/crystal_heads_1024_768.jpg",
+        "background": {
+            "path": "assets/space_galaxy_shine_1024x768.jpg",
             "destRect": {
                 "width": 0,
                 "height": 0,
@@ -46,7 +46,7 @@
         }
     },
     "buttons": {
-        "Neu": {
+        "Play": {
             "width": 0,
             "height": 0,
             "xpos": 0,
@@ -56,7 +56,7 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "restartPlay",
+            "functionPointer": "menuToPlay",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
             "viewport": "menu",
@@ -65,7 +65,7 @@
             "flip": 0,
             "quality": 2
         },
-        "Menü": {
+        "Exit": {
             "width": 0,
             "height": 0,
             "xpos": 0,
@@ -75,7 +75,7 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "gameOverToMain",
+            "functionPointer": "exitFromMenu",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
             "viewport": "menu",
@@ -95,15 +95,15 @@
     },
     "music": {
         "background": {
-            "path": "music/Beethoven_Moonlight_Sonata_Instrumental.mp3"
+            "path": "music/Bach_Air_On_the_G_String.mp3"
         }
     },
     "sound": {
     },
     "texttexture": {
-        "Over": {
+        "Titel": {
             "fontID": "oxyReg30",
-            "text": "He's dead, Jim!",
+            "text": "Engage!",
             "colorID": "white",
             "viewport": "screen",
             "quality": 2
@@ -131,7 +131,7 @@
             "yPos": 0,
             "width": 0,
             "height": 0,
-            "texture": "gameOverBackground",
+            "texture": "background",
             "relativeSizeX": 0.8,
             "relativeSizeY": 1.00,
             "alignment": "right"
