@@ -5,24 +5,14 @@
 #include "../header/SoundManager.hpp"
 #include "../header/TextureManager.hpp"
 
-const std::string PauseState::pauseID = "PAUSE";
-
-// leaves the state to the main menu
-void PauseState::pauseToMain()
+PauseState::PauseState(GameStateMachine& stateMachine) : GameState(stateMachine)
 {
-    Game::Instance()->getGameStateMachine()->changeState(new MenuState(), "states/menuState.json");
-}
-
-// leaves the state and goes to the previous state
-void PauseState::resumePlay()
-{
-    Game::Instance()->getGameStateMachine()->popState();
 }
 
 // update the state, input for example
-void PauseState::update()
+bool PauseState::update()
 {
-    GameState::update();
+    return GameState::update();
 }
 
 // renders the state
@@ -31,11 +21,24 @@ void PauseState::render()
     GameState::render();
 }
 
+bool PauseState::handleEvents()
+{
+    return GameState::handleEvents();
+}
+
 // loads all necessary resources for the state
 bool PauseState::onEnter(std::string fileName)
 {
-    this->functionMap["pauseToMain"] = pauseToMain;
-    this->functionMap["resumePlay"] = resumePlay;
+    this->functionMap["pauseToMain"] = [this] ()
+    {
+        this->requestStackClear();
+        this->requestStackPush(States::Menu);
+    };
+    this->functionMap["resumePlay"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::Play);
+    };
 
     return GameState::onEnter(fileName);
 }

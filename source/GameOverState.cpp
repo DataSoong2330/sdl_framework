@@ -7,22 +7,14 @@
 #include "../header/SoundManager.hpp"
 #include "../header/TextureManager.hpp"
 
-const std::string GameOverState::gameOverID = "GAMEOVER";
-
-void GameOverState::gameOverToMain()
+GameOverState::GameOverState(GameStateMachine& stateMachine) : GameState(stateMachine)
 {
-    Game::Instance()->getGameStateMachine()->changeState(new MenuState(), "states/menuState.json");
-}
-
-void GameOverState::restartPlay()
-{
-    Game::Instance()->getGameStateMachine()->changeState(new PlayState(), "states/playState.json");
 }
 
 // update the state
-void GameOverState::update()
+bool GameOverState::update()
 {
-    GameState::update();
+    return GameState::update();
 }
 
 void GameOverState::render()
@@ -30,10 +22,23 @@ void GameOverState::render()
     GameState::render();
 }
 
+bool GameOverState::handleEvents()
+{
+    return GameState::handleEvents();
+}
+
 bool GameOverState::onEnter(std::string fileName)
 {
-    this->functionMap["gameOverToMain"] = gameOverToMain;
-    this->functionMap["restartPlay"] = restartPlay;
+    this->functionMap["gameOverToMain"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::Menu);
+    };
+    this->functionMap["restartPlay"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::Play);
+    };
 
     return GameState::onEnter(fileName);
 }

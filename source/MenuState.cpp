@@ -5,25 +5,14 @@
 #include "../header/SoundManager.hpp"
 #include "../header/TextureManager.hpp"
 
-// state ID
-const std::string MenuState::menuID = "MENU";
-
-// switch state to play state
-void MenuState::menuToPlay()
+MenuState::MenuState(GameStateMachine& stateMachine) : GameState(stateMachine)
 {
-    Game::Instance()->getGameStateMachine()->changeState(new PlayState(), "states/playState.json");
-}
-
-// quit the game
-void MenuState::exitFromMenu()
-{
-    Game::Instance()->quit();
 }
 
 // update the state
-void MenuState::update()
+bool MenuState::update()
 {
-    GameState::update();
+    return GameState::update();
 }
 
 // render the state
@@ -32,11 +21,23 @@ void MenuState::render()
     GameState::render();
 }
 
+bool MenuState::handleEvents()
+{
+    return GameState::handleEvents();
+}
+
 // what happens on entering the state
 bool MenuState::onEnter(std::string fileName)
 {
-    this->functionMap["menuToPlay"] = menuToPlay;
-    this->functionMap["exitFromMenu"] = exitFromMenu;
+    this->functionMap["menuToPlay"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::Play);
+    };
+    this->functionMap["exitFromMenu"] = [this] ()
+    {
+        Game::Instance()->quit();
+    };
 
     return GameState::onEnter(fileName);
 }

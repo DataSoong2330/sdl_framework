@@ -22,7 +22,7 @@
             "flip": 0,
             "viewport": "screen"
         },
-        "none": {
+        "nonePause": {
             "path": "nullptr",
             "destRect": {
                 "width": 0,

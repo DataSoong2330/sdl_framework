@@ -6,25 +6,22 @@
 class GameOverState : public GameState
 {
     public:
+        GameOverState(GameStateMachine& stateMachine);
+
         // update input and so on
-        void update();
+        bool update();
         // render all necessary stuff of a certain state
         void render();
+        // handle Events
+        bool handleEvents();
 
         // loads all images, sounds and stuff
         bool onEnter(std::string fileName);
         // frees the memory allocated on entering a state
         bool onExit();
 
-        // gets the state ID like Menu, Play, GameOver and so on
-        inline const std::string getStateID() const { return gameOverID; }
-
     protected:
     private:
-        static const std::string gameOverID;
-
-        static void gameOverToMain();
-        static void restartPlay();
 };
 
 #endif // __GAMEOVERSTATE__

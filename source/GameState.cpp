@@ -1,11 +1,16 @@
 #include "../header/Game.hpp"
 #include "../header/GameState.hpp"
+#include "../header/GameStateMachine.hpp"
 #include "../header/InputManager.hpp"
 #include "../header/Logfile.hpp"
 #include "../header/SoundManager.hpp"
 #include "../header/TextureManager.hpp"
 
-void GameState::update()
+GameState::GameState(GameStateMachine& stateMachine) : gameStateMachine(&stateMachine)
+{
+}
+
+bool GameState::update()
 {
     if(InputManager::Instance()->isKeyPressed(SDL_SCANCODE_SPACE))
     {
@@ -40,6 +45,8 @@ void GameState::update()
         for(unsigned i = 0; i < this->gameObjects.size(); i++)
             this->gameObjects[i]->update();
     }
+
+    return true;
 }
 
 void GameState::render()
@@ -62,9 +69,16 @@ void GameState::render()
     // draws all the game objects
     if(this->gameObjects.size() > 0)
     {
-        for(unsigned i = 0; i < this->gameObjects.size(); i++)
-            this->gameObjects[i]->draw();
+        for(const auto &item : this->gameObjects)
+        {
+            item->draw();
+        }
     }
+}
+
+bool GameState::handleEvents()
+{
+    return true;
 }
 
 bool GameState::onEnter(std::string fileName)
@@ -140,6 +154,21 @@ bool GameState::onExit()
     InputManager::Instance()->reset();
 
     return true;
+}
+
+void GameState::requestStackPush(States stateID)
+{
+    this->gameStateMachine->pushState(stateID);
+}
+
+void GameState::requestStackPop()
+{
+    this->gameStateMachine->popState();
+}
+
+void GameState::requestStackClear()
+{
+    this->gameStateMachine->clearStates();
 }
 
 void GameState::loadMusic()

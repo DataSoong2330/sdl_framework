@@ -1,12 +1,17 @@
 #include "../header/Game.hpp"
+#include "../header/GameOverState.hpp"
 #include "../header/InputManager.hpp"
 #include "../header/Logfile.hpp"
 #include "../header/MenuState.hpp"
+#include "../header/PauseState.hpp"
+#include "../header/PlayState.hpp"
 #include "../header/SoundManager.hpp"
 #include "../header/SystemTime.hpp"
 #include "../header/TextureManager.hpp"
 
 Game* Game::game = 0;
+
+#include <sstream>
 
 // initializes the variables
 Game::Game()
@@ -50,6 +55,9 @@ Game::Game()
 // cleans up everything
 Game::~Game()
 {
+    this->gameStateMachine->clearStates();
+    //this->gameStateMachine->update();
+
     TextureManager::Instance()->freeMemory();
     SoundManager::Instance()->freeMemory();
 
@@ -118,8 +126,9 @@ bool Game::init()
 
                     if(SoundManager::Instance()->init(sfxFlags, 44100, AUDIO_S16, 2, 4096))
                     {
-                        this->gameStateMachine = new GameStateMachine();
-                        this->gameStateMachine->pushState(new MenuState(), "states/menuState.json");
+                        this->gameStateMachine = std::make_unique<GameStateMachine>();
+                        this->registerStates();
+                        this->gameStateMachine->pushState(States::Menu);
 
                         success = true;
                         this->running = true;
@@ -217,6 +226,7 @@ void Game::render()
 // check for events and respond to them
 void Game::handleEvents()
 {
+    this->gameStateMachine->handleEvents();
 }
 
 // update the game
@@ -226,4 +236,12 @@ void Game::update()
     InputManager::Instance()->update();
     // update the current state
     this->gameStateMachine->update();
+}
+
+void Game::registerStates()
+{
+    this->gameStateMachine->registerState<MenuState>(States::Menu);
+    this->gameStateMachine->registerState<PlayState>(States::Play);
+    this->gameStateMachine->registerState<PauseState>(States::Pause);
+    this->gameStateMachine->registerState<GameOverState>(States::GameOver);
 }

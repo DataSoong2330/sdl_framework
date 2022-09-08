@@ -44,7 +44,7 @@ class Game
         void update();
 
         // get the game state machine
-        inline GameStateMachine* getGameStateMachine() { return this->gameStateMachine; }
+        //inline GameStateMachine* getGameStateMachine() { return this->gameStateMachine; }
 
         // quits the game
         void quit() { this->running = false; }
@@ -81,8 +81,10 @@ class Game
         Uint32 countedFrames;
         float avgFPS;
 
+        // register the states for the GameStateMachine
+        void registerStates();
         // the game state machine
-        GameStateMachine* gameStateMachine;
+        std::unique_ptr<GameStateMachine> gameStateMachine;
 
         // is the game running?
         bool running;

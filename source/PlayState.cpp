@@ -6,28 +6,14 @@
 #include "../header/PlayState.hpp"
 #include "../header/TextureManager.hpp"
 
-// state ID
-const std::string PlayState::playID = "PLAY";
-
-void PlayState::playToPause()
+PlayState::PlayState(GameStateMachine& stateMachine) : GameState(stateMachine)
 {
-    Game::Instance()->getGameStateMachine()->pushState(new PauseState(), "states/pauseState.json");
-}
-
-void PlayState::playToGameOver()
-{
-    Game::Instance()->getGameStateMachine()->changeState(new GameOverState(), "states/gameOverState.json");
-}
-
-void PlayState::returnToMenu()
-{
-    Game::Instance()->getGameStateMachine()->changeState(new MenuState(), "states/menuState.json");
 }
 
 // update the state
-void PlayState::update()
+bool PlayState::update()
 {
-    GameState::update();
+    return GameState::update();
 }
 
 // render the state
@@ -36,12 +22,29 @@ void PlayState::render()
     GameState::render();
 }
 
+bool PlayState::handleEvents()
+{
+    return GameState::handleEvents();
+}
+
 // what happens on entering the state
 bool PlayState::onEnter(std::string fileName)
 {
-    this->functionMap["playToPause"] = playToPause;
-    this->functionMap["playToGameOver"] = playToGameOver;
-    this->functionMap["returnToMenu"] = returnToMenu;
+    this->functionMap["playToPause"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::Pause);
+    };
+    this->functionMap["playToGameOver"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::GameOver);
+    };
+    this->functionMap["returnToMenu"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::Menu);
+    };
 
     return GameState::onEnter(fileName);
 }

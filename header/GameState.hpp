@@ -13,23 +13,34 @@
 #include "../header/MenuButton.hpp"
 #include "../header/Viewport.hpp"
 
+class GameStateMachine;
+
 class GameState
 {
     public:
+        // ctor for the game state
+        GameState(GameStateMachine& stateMachine);
+
         // update input and so on
-        virtual void update();
+        virtual bool update();
         // render all necessary stuff of a certain state
         virtual void render();
+        // handle events
+        virtual bool handleEvents();
 
         // loads all images, sounds and stuff
         virtual bool onEnter(std::string fileName);
         // frees the memory allocated on entering a state
         virtual bool onExit();
 
-        // gets the state ID like Menu, Play, GameOver and so on
-        virtual const std::string getStateID() const = 0;
-
     protected:
+        // sends a push request to the game state machine
+        void requestStackPush(States stateID);
+        // sends a pop request to the game state machine
+		void requestStackPop();
+		// sends a clear request to the game state machine
+		void requestStackClear();
+
         // all game objects like buttons and such
         std::vector<GameObject*> gameObjects;
         //ButtonCoordinate coordinate;
@@ -65,6 +76,8 @@ class GameState
         void loadTextTextures();
         void loadButtons();
         void loadAssets();
+
+        GameStateMachine* gameStateMachine;
 };
 
 #endif // __GAMESTATE__
