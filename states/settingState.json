@@ -1,7 +1,7 @@
 {
     "assets": {
-        "pauseBackground": {
-            "path": "assets/strand_1024_768.jpg",
+        "settingBackground": {
+            "path": "assets/difference_engine_1024_768.jpg",
             "destRect": {
                 "width": 0,
                 "height": 0,
@@ -22,7 +22,7 @@
             "flip": 0,
             "viewport": "screen"
         },
-        "nonePause": {
+        "none": {
             "path": "nullptr",
             "destRect": {
                 "width": 0,
@@ -46,7 +46,7 @@
         }
     },
     "buttons": {
-        "Resume": {
+        "Back": {
             "width": 0,
             "height": 0,
             "xpos": 0,
@@ -56,26 +56,7 @@
             "green": 85,
             "blue": 170,
             "alpha": 255,
-            "functionPointer": "resumePlay",
-            "relativeSizeX": 10,
-            "relativeSizeY": 2,
-            "viewport": "menu",
-            "ttf": "oxyReg20",
-            "color": "white",
-            "flip": 0,
-            "quality": 2
-        },
-        "Menu": {
-            "width": 0,
-            "height": 0,
-            "xpos": 0,
-            "ypos": 0,
-            "angle": 0.0,
-            "red": 0,
-            "green": 85,
-            "blue": 170,
-            "alpha": 255,
-            "functionPointer": "pauseToMain",
+            "functionPointer": "exitToMenu",
             "relativeSizeX": 10,
             "relativeSizeY": 2,
             "viewport": "menu",
@@ -94,26 +75,19 @@
         }
     },
     "music": {
-        "background": {
-            "path": "music/Beethoven_Moonlight_Sonata_Instrumental.mp3"
-        }
     },
     "sound": {
     },
     "texttexture": {
-        "PauseState": {
+        "Over": {
             "fontID": "oxyReg30",
-            "text": "Your lack of faith is disturbing",
+            "text": "Change the laws of physics",
             "colorID": "white",
             "viewport": "screen",
             "quality": 2
         }
     },
     "ttf": {
-        "oxyReg20": {
-            "path": "ttf/OxygenRegular.ttf",
-            "size": 20
-        },
         "oxyReg30": {
             "path": "ttf/OxygenRegular.ttf",
             "size": 20
@@ -135,7 +109,7 @@
             "yPos": 0,
             "width": 0,
             "height": 0,
-            "texture": "pauseBackground",
+            "texture": "settingBackground",
             "relativeSizeX": 0.8,
             "relativeSizeY": 1.00,
             "alignment": "right"

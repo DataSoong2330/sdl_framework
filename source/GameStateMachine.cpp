@@ -80,6 +80,8 @@ void GameStateMachine::applyPendingChanges()
                                                                     break;
                                             case States::GameOver:  this->gameStates.back()->onEnter("states/gameOverState.json");
                                                                     break;
+                                            case States::Setting:   this->gameStates.back()->onEnter("states/settingState.json");
+                                                                    break;
                                             case States::None:      break;
                                         }
 

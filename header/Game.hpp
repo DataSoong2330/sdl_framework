@@ -73,13 +73,11 @@ class Game
         static const Uint32 DELAY_TIME = 1000 / FPS;
 
         // variables for measuring and calculating the current fps
-        static const int arraySize = 10;
-        Uint32 frameTimes[arraySize];
-        Uint32 frameTimeIndex;
-        Uint32 frameTimeLast;
-        Uint32 getTicks;
+        Uint32 lastTicks;
+        Uint32 currentTicks;
+        Uint32 totalTicksElapsed;
         Uint32 countedFrames;
-        float avgFPS;
+        int avgFPS;
 
         // register the states for the GameStateMachine
         void registerStates();

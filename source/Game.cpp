@@ -5,6 +5,7 @@
 #include "../header/MenuState.hpp"
 #include "../header/PauseState.hpp"
 #include "../header/PlayState.hpp"
+#include "../header/SettingState.hpp"
 #include "../header/SoundManager.hpp"
 #include "../header/SystemTime.hpp"
 #include "../header/TextureManager.hpp"
@@ -44,12 +45,10 @@ Game::Game()
     this->renderer = NULL;
 
     this->countedFrames = 0;
-    this->avgFPS = 0.0f;
-    this->frameTimeIndex = 0;
-    this->frameTimeLast = SDL_GetTicks();
-    this->getTicks = 0;
-
-    this->frameTimes[arraySize] = {0};
+    this->avgFPS = 0;
+    this->lastTicks = 0;
+    this->currentTicks = 0;
+    this->totalTicksElapsed = 0;
 }
 
 // cleans up everything
@@ -167,38 +166,26 @@ bool Game::init()
 // delay waits a specific time after a rendering a frame
 void Game::delay()
 {
-    // determines which element of the array will be changed
-    this->frameTimeIndex = this->countedFrames % arraySize;
+    this->currentTicks = SDL_GetTicks();
+    Uint32 ticksElapsed = this->currentTicks - this->lastTicks;
 
-    /*
-    // get the current time
-    this->getTicks = SDL_GetTicks();
+    this->totalTicksElapsed += ticksElapsed;
 
-    // saves the time the current frame needed into the array
-    this->frameTimes[this->frameTimeIndex] = this->getTicks - this->frameTimeLast;
+    if(this->totalTicksElapsed > 1000)
+    {
+        this->avgFPS = this->countedFrames / (this->totalTicksElapsed / 1000);
+        this->totalTicksElapsed = 0;
+        this->countedFrames = 0;
 
-    // saves the current time for next delay
-    this->frameTimeLast = this->getTicks;
-
-    // delete old value
-    this->avgFPS = 0.f;
-
-    // add up all frame times in the array
-    for(unsigned i = 0; i < arraySize; i++)
-        this->avgFPS += this->frameTimes[i];
-
-    // get the average frame time
-    this->avgFPS /= arraySize;
-
-    // calculate the average frames per second
-    this->avgFPS = 1000.f / avgFPS;
-
-    // add the avgFPS to the texture manager
-    TextureManager::Instance()->loadTextTexture("oxyReg30", (std::to_string(avgFPS) + " FPS"), "white", "Fps");*/
+        // add the avgFPS to the texture manager
+        TextureManager::Instance()->loadTextTexture("oxyReg30", (std::to_string(avgFPS) + " FPS"), "white", "Fps");
+    }
 
     // if the frame was ready to early it will wait for the rest of the time
-    if(this->frameTimes[this->frameTimeIndex] < DELAY_TIME)
-        SDL_Delay(DELAY_TIME - this->frameTimes[this->frameTimeIndex]);
+    if(ticksElapsed < DELAY_TIME)
+        SDL_Delay(DELAY_TIME - ticksElapsed);
+
+    this->lastTicks = this->currentTicks;
 }
 
 // renders all necessary textures
@@ -215,6 +202,8 @@ void Game::render()
 
     // renders the current game state
     this->gameStateMachine->render();
+
+    TextureManager::Instance()->drawTexture("Fps", 10, 10, nullptr, "screen", 0.0d, nullptr, SDL_FLIP_NONE);
 
     // render all present textures
     SDL_RenderPresent(this->renderer);
@@ -236,6 +225,8 @@ void Game::update()
     InputManager::Instance()->update();
     // update the current state
     this->gameStateMachine->update();
+
+    TextureManager::Instance()->loadTextTexture("oxyReg30", (std::to_string(avgFPS) + " FPS"), "white", "Fps");
 }
 
 void Game::registerStates()
@@ -244,4 +235,5 @@ void Game::registerStates()
     this->gameStateMachine->registerState<PlayState>(States::Play);
     this->gameStateMachine->registerState<PauseState>(States::Pause);
     this->gameStateMachine->registerState<GameOverState>(States::GameOver);
+    this->gameStateMachine->registerState<SettingState>(States::Setting);
 }

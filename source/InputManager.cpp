@@ -174,7 +174,7 @@ void InputManager::update()
 {
     SDL_Event event;
 
-    SDL_WaitEvent(&event);
+    SDL_PollEvent(&event);
 
     do
     {

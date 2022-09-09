@@ -34,6 +34,11 @@ bool MenuState::onEnter(std::string fileName)
         this->requestStackPop();
         this->requestStackPush(States::Play);
     };
+    this->functionMap["menuToSetting"] = [this] ()
+    {
+        this->requestStackPop();
+        this->requestStackPush(States::Setting);
+    };
     this->functionMap["exitFromMenu"] = [this] ()
     {
         Game::Instance()->quit();

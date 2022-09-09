@@ -112,7 +112,7 @@
     "ttf": {
         "oxyReg30": {
             "path": "ttf/OxygenRegular.ttf",
-            "size": 30
+            "size": 20
         }
     },
     "viewports": {
